@@ -1,0 +1,590 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>03 Real World App</title>
+    <style>
+      :root {
+        --bg: #f5f7fb;
+        --panel: #ffffff;
+        --line: #dde5f0;
+        --text: #1f2a37;
+        --muted: #667085;
+        --accent: #1f5eff;
+        --accent-soft: #e7efff;
+        --success: #13795b;
+        --success-soft: #dff5ec;
+        --warning: #9a6700;
+        --warning-soft: #fff1cc;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Segoe UI", sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(circle at top right, #ecf3ff, transparent 24%),
+          linear-gradient(180deg, #fafcff 0%, var(--bg) 100%);
+      }
+
+      button,
+      input,
+      select,
+      textarea {
+        font: inherit;
+      }
+
+      .page {
+        min-height: 100vh;
+        padding: 28px 18px 40px;
+      }
+
+      .login-shell,
+      .app-shell {
+        max-width: 1180px;
+        margin: 0 auto;
+      }
+
+      .login-card,
+      .panel,
+      .summary-card {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        box-shadow: 0 10px 28px rgba(17, 24, 39, 0.05);
+      }
+
+      .login-card {
+        max-width: 460px;
+        margin: 72px auto 0;
+        padding: 28px;
+      }
+
+      h1,
+      h2,
+      h3 {
+        margin: 0 0 12px;
+      }
+
+      p {
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      .form-grid {
+        display: grid;
+        gap: 14px;
+        margin-top: 18px;
+      }
+
+      label {
+        display: grid;
+        gap: 6px;
+      }
+
+      input,
+      select,
+      textarea {
+        width: 100%;
+        padding: 11px 12px;
+        border-radius: 12px;
+        border: 1px solid var(--line);
+        background: white;
+      }
+
+      textarea {
+        resize: vertical;
+      }
+
+      .primary-button,
+      .secondary-button,
+      .ghost-button {
+        padding: 10px 14px;
+        border-radius: 12px;
+        cursor: pointer;
+      }
+
+      .primary-button {
+        border: 1px solid var(--accent);
+        background: var(--accent);
+        color: white;
+      }
+
+      .secondary-button,
+      .ghost-button {
+        border: 1px solid var(--line);
+        background: white;
+        color: var(--text);
+      }
+
+      .error-text {
+        margin-top: 10px;
+        color: #b42318;
+      }
+
+      .topbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 20px;
+      }
+
+      .topbar-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .summary-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 16px;
+        margin-bottom: 20px;
+      }
+
+      .summary-card {
+        padding: 18px;
+      }
+
+      .summary-card strong {
+        display: block;
+        font-size: 28px;
+        margin-top: 10px;
+      }
+
+      .workspace {
+        display: grid;
+        grid-template-columns: 1.35fr 0.95fr;
+        gap: 18px;
+      }
+
+      .panel {
+        padding: 18px;
+      }
+
+      .toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-bottom: 16px;
+      }
+
+      .toolbar input,
+      .toolbar select {
+        max-width: 220px;
+      }
+
+      .item-list {
+        display: grid;
+        gap: 12px;
+      }
+
+      .task-card {
+        padding: 16px;
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        background: #fcfdff;
+      }
+
+      .task-card.selected {
+        border-color: #c5d7ff;
+        background: #f7faff;
+      }
+
+      .meta-row,
+      .card-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 10px;
+      }
+
+      .chip {
+        display: inline-block;
+        padding: 4px 9px;
+        border-radius: 999px;
+        font-size: 12px;
+      }
+
+      .chip.todo {
+        background: var(--warning-soft);
+        color: var(--warning);
+      }
+
+      .chip.in-progress {
+        background: var(--accent-soft);
+        color: var(--accent);
+      }
+
+      .chip.done {
+        background: var(--success-soft);
+        color: var(--success);
+      }
+
+      .empty-state {
+        padding: 18px;
+        border: 1px dashed var(--line);
+        border-radius: 16px;
+      }
+
+      .detail-layout {
+        display: grid;
+        gap: 16px;
+      }
+
+      .detail-block {
+        padding: 14px;
+        border-radius: 14px;
+        background: #f8faff;
+        border: 1px solid #e5ebf5;
+      }
+
+      .detail-block strong {
+        display: block;
+        margin-bottom: 6px;
+      }
+
+      @media (max-width: 1100px) {
+        .summary-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .workspace {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 720px) {
+        .summary-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .topbar {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <script type="module">
+      import { computed, createApp, reactive, ref } from "https://unpkg.com/vue@3/dist/vue.esm-browser.js";
+
+      const taskSeed = [
+        {
+          id: 1,
+          title: "Build login gate",
+          status: "done",
+          priority: "high",
+          assignee: "Plato",
+          description: "Use a small local auth flow before showing the app shell.",
+        },
+        {
+          id: 2,
+          title: "Add task search and filters",
+          status: "in-progress",
+          priority: "medium",
+          assignee: "Learner",
+          description: "Support quick filtering across the current task collection.",
+        },
+        {
+          id: 3,
+          title: "Model edit panel flow",
+          status: "todo",
+          priority: "high",
+          assignee: "Plato",
+          description: "Make the detail side editable instead of read-only.",
+        },
+      ];
+
+      createApp({
+        setup() {
+          const isLoggedIn = ref(false);
+          const loginError = ref("");
+          const tasks = ref(structuredClone(taskSeed));
+          const selectedTaskId = ref(tasks.value[0].id);
+          const searchKeyword = ref("");
+          const statusFilter = ref("all");
+
+          const loginForm = reactive({
+            email: "",
+            password: "",
+          });
+
+          const editForm = reactive({
+            title: "",
+            status: "todo",
+            priority: "medium",
+            assignee: "",
+            description: "",
+          });
+
+          const selectedTask = computed(() => {
+            return tasks.value.find((task) => task.id === selectedTaskId.value) || null;
+          });
+
+          const filteredTasks = computed(() => {
+            return tasks.value.filter((task) => {
+              const matchesKeyword = task.title.toLowerCase().includes(searchKeyword.value.trim().toLowerCase());
+              const matchesStatus = statusFilter.value === "all" || task.status === statusFilter.value;
+              return matchesKeyword && matchesStatus;
+            });
+          });
+
+          const todoCount = computed(() => tasks.value.filter((task) => task.status === "todo").length);
+          const inProgressCount = computed(() => tasks.value.filter((task) => task.status === "in-progress").length);
+          const doneCount = computed(() => tasks.value.filter((task) => task.status === "done").length);
+          const highPriorityCount = computed(() => tasks.value.filter((task) => task.priority === "high").length);
+
+          function signIn() {
+            if (!loginForm.email.trim() || !loginForm.password.trim()) {
+              loginError.value = "Email and password are required.";
+              return;
+            }
+
+            loginError.value = "";
+            isLoggedIn.value = true;
+            syncEditForm();
+          }
+
+          function signOut() {
+            isLoggedIn.value = false;
+            loginForm.email = "";
+            loginForm.password = "";
+            loginError.value = "";
+          }
+
+          function selectTask(id) {
+            selectedTaskId.value = id;
+            syncEditForm();
+          }
+
+          function syncEditForm() {
+            const task = selectedTask.value;
+            if (!task) {
+              return;
+            }
+
+            editForm.title = task.title;
+            editForm.status = task.status;
+            editForm.priority = task.priority;
+            editForm.assignee = task.assignee;
+            editForm.description = task.description;
+          }
+
+          function saveTaskEdits() {
+            const task = selectedTask.value;
+            if (!task) {
+              return;
+            }
+
+            task.title = editForm.title.trim() || task.title;
+            task.status = editForm.status;
+            task.priority = editForm.priority;
+            task.assignee = editForm.assignee.trim() || task.assignee;
+            task.description = editForm.description.trim() || task.description;
+          }
+
+          function createTask() {
+            const newTask = {
+              id: Date.now(),
+              title: "New workflow task",
+              status: "todo",
+              priority: "medium",
+              assignee: "Unassigned",
+              description: "Replace this placeholder with a real workflow step.",
+            };
+
+            tasks.value.unshift(newTask);
+            selectedTaskId.value = newTask.id;
+            syncEditForm();
+          }
+
+          function resetFilters() {
+            searchKeyword.value = "";
+            statusFilter.value = "all";
+          }
+
+          return {
+            isLoggedIn,
+            loginForm,
+            loginError,
+            tasks,
+            selectedTask,
+            filteredTasks,
+            searchKeyword,
+            statusFilter,
+            todoCount,
+            inProgressCount,
+            doneCount,
+            highPriorityCount,
+            editForm,
+            signIn,
+            signOut,
+            selectTask,
+            saveTaskEdits,
+            createTask,
+            resetFilters,
+          };
+        },
+        mounted() {
+          if (this.selectedTask) {
+            this.selectTask(this.selectedTask.id);
+          }
+        },
+        template: `
+          <div class="page">
+            <section v-if="!isLoggedIn" class="login-shell">
+              <div class="login-card">
+                <h1>Real World App Practice</h1>
+                <p>
+                  Start with a lightweight sign-in step, then move into a list-detail-edit
+                  workflow that feels closer to a real Vue 3 admin app.
+                </p>
+
+                <div class="form-grid">
+                  <label>
+                    Email
+                    <input v-model="loginForm.email" type="email" placeholder="learner@example.com" />
+                  </label>
+                  <label>
+                    Password
+                    <input v-model="loginForm.password" type="password" placeholder="Enter any password" />
+                  </label>
+                </div>
+
+                <button class="primary-button" style="margin-top: 16px;" @click="signIn">Sign In</button>
+                <p v-if="loginError" class="error-text">{{ loginError }}</p>
+              </div>
+            </section>
+
+            <section v-else class="app-shell">
+              <header class="topbar">
+                <div>
+                  <h2>Workflow Center</h2>
+                  <p>Practice one small but complete flow: login, list, inspect, edit, and update state.</p>
+                </div>
+                <div class="topbar-actions">
+                  <button class="secondary-button" @click="createTask">New Task</button>
+                  <button class="ghost-button" @click="signOut">Sign Out</button>
+                </div>
+              </header>
+
+              <section class="summary-grid">
+                <article class="summary-card">
+                  <small>Todo</small>
+                  <strong>{{ todoCount }}</strong>
+                </article>
+                <article class="summary-card">
+                  <small>In Progress</small>
+                  <strong>{{ inProgressCount }}</strong>
+                </article>
+                <article class="summary-card">
+                  <small>Done</small>
+                  <strong>{{ doneCount }}</strong>
+                </article>
+                <article class="summary-card">
+                  <small>High Priority</small>
+                  <strong>{{ highPriorityCount }}</strong>
+                </article>
+              </section>
+
+              <section class="workspace">
+                <div class="panel">
+                  <h3>Task List</h3>
+                  <div class="toolbar">
+                    <input v-model="searchKeyword" type="text" placeholder="Search tasks" />
+                    <select v-model="statusFilter">
+                      <option value="all">All statuses</option>
+                      <option value="todo">Todo</option>
+                      <option value="in-progress">In progress</option>
+                      <option value="done">Done</option>
+                    </select>
+                    <button class="ghost-button" @click="resetFilters">Reset</button>
+                  </div>
+
+                  <div v-if="filteredTasks.length > 0" class="item-list">
+                    <article
+                      v-for="task in filteredTasks"
+                      :key="task.id"
+                      class="task-card"
+                      :class="{ selected: selectedTask && selectedTask.id === task.id }"
+                    >
+                      <h3>{{ task.title }}</h3>
+                      <p>{{ task.description }}</p>
+                      <div class="meta-row">
+                        <span class="chip" :class="task.status">{{ task.status }}</span>
+                        <span class="chip">{{ task.priority }}</span>
+                        <span class="chip">{{ task.assignee }}</span>
+                      </div>
+                      <div class="card-actions">
+                        <button class="secondary-button" @click="selectTask(task.id)">Open</button>
+                      </div>
+                    </article>
+                  </div>
+                  <div v-else class="empty-state">
+                    No tasks match the current filters.
+                  </div>
+                </div>
+
+                <aside class="panel">
+                  <template v-if="selectedTask">
+                    <h3>Edit Task</h3>
+                    <div class="detail-layout">
+                      <div class="detail-block">
+                        <strong>Current Task</strong>
+                        <div>{{ selectedTask.title }}</div>
+                      </div>
+
+                      <label>
+                        Title
+                        <input v-model="editForm.title" type="text" />
+                      </label>
+                      <label>
+                        Status
+                        <select v-model="editForm.status">
+                          <option value="todo">Todo</option>
+                          <option value="in-progress">In progress</option>
+                          <option value="done">Done</option>
+                        </select>
+                      </label>
+                      <label>
+                        Priority
+                        <select v-model="editForm.priority">
+                          <option value="low">Low</option>
+                          <option value="medium">Medium</option>
+                          <option value="high">High</option>
+                        </select>
+                      </label>
+                      <label>
+                        Assignee
+                        <input v-model="editForm.assignee" type="text" />
+                      </label>
+                      <label>
+                        Description
+                        <textarea v-model="editForm.description" rows="6"></textarea>
+                      </label>
+                      <button class="primary-button" @click="saveTaskEdits">Save Changes</button>
+                    </div>
+                  </template>
+                  <template v-else>
+                    <h3>No Task Selected</h3>
+                    <p>Select a task from the list to start editing.</p>
+                  </template>
+                </aside>
+              </section>
+            </section>
+          </div>
+        `,
+      }).mount("#app");
+    </script>
+  </body>
+</html>

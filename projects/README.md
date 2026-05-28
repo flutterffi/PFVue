@@ -12,3 +12,4 @@ Current status:
 
 - `01_component_playground` is now a runnable Vue 3 mini project
 - `02_admin_dashboard` is now a runnable Vue 3 admin-style practice project
+- `03_real_world_app` is now a runnable Vue 3 workflow practice project

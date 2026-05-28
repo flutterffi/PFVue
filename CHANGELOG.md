@@ -18,3 +18,9 @@
 - added a runnable admin dashboard project under `projects/02_admin_dashboard`
 - introduced overview metric cards, a searchable task table, and a detail side panel
 - added task status transitions and shared derived metrics from the same task dataset
+
+## v0.4.0
+
+- added a runnable real-world workflow project under `projects/03_real_world_app`
+- introduced a lightweight sign-in gate before the main app shell
+- added a list-detail-edit flow with shared state updates across summary cards and task views
