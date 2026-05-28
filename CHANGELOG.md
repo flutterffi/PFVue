@@ -12,3 +12,9 @@
 - introduced a tabbed Vue 3 workspace with reusable lesson cards
 - added category, level, and keyword filtering plus derived state previews
 - added a form studio that creates new library items from a live preview flow
+
+## v0.3.0
+
+- added a runnable admin dashboard project under `projects/02_admin_dashboard`
+- introduced overview metric cards, a searchable task table, and a detail side panel
+- added task status transitions and shared derived metrics from the same task dataset

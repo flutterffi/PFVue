@@ -1,0 +1,526 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>02 Admin Dashboard</title>
+    <style>
+      :root {
+        --bg: #eef3f1;
+        --panel: #fbfdfc;
+        --line: #d7e2dd;
+        --text: #1f2d2a;
+        --muted: #5f6f69;
+        --accent: #1d6b57;
+        --accent-soft: #dff1ea;
+        --warning-soft: #fff4de;
+        --warning-text: #8b5a00;
+        --danger-soft: #fde8e8;
+        --danger-text: #a12626;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+        background:
+          linear-gradient(180deg, #f7fbf9 0%, var(--bg) 100%);
+        color: var(--text);
+      }
+
+      .app-shell {
+        min-height: 100vh;
+        display: grid;
+        grid-template-columns: 250px 1fr;
+      }
+
+      .sidebar {
+        padding: 28px 20px;
+        background: #173c34;
+        color: white;
+      }
+
+      .sidebar h1 {
+        margin: 0 0 8px;
+        font-size: 28px;
+      }
+
+      .sidebar p {
+        margin: 0 0 24px;
+        color: rgba(255, 255, 255, 0.72);
+        line-height: 1.5;
+      }
+
+      .sidebar-nav {
+        display: grid;
+        gap: 10px;
+      }
+
+      .sidebar-nav button {
+        width: 100%;
+        text-align: left;
+        background: rgba(255, 255, 255, 0.06);
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 12px 14px;
+        border-radius: 14px;
+        cursor: pointer;
+      }
+
+      .sidebar-nav button.active {
+        background: rgba(255, 255, 255, 0.16);
+      }
+
+      .content {
+        padding: 28px 24px 40px;
+      }
+
+      .topbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 20px;
+      }
+
+      .topbar h2 {
+        margin: 0 0 8px;
+        font-size: 30px;
+      }
+
+      .topbar p {
+        margin: 0;
+        color: var(--muted);
+      }
+
+      .primary-button,
+      .ghost-button,
+      .status-button,
+      .table-action {
+        border-radius: 12px;
+        padding: 10px 14px;
+        cursor: pointer;
+        font: inherit;
+      }
+
+      .primary-button {
+        border: 1px solid var(--accent);
+        background: var(--accent);
+        color: white;
+      }
+
+      .ghost-button,
+      .status-button,
+      .table-action {
+        border: 1px solid var(--line);
+        background: white;
+        color: var(--text);
+      }
+
+      .stat-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 16px;
+        margin-bottom: 20px;
+      }
+
+      .stat-card,
+      .workspace-panel,
+      .detail-card {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        box-shadow: 0 8px 24px rgba(26, 42, 37, 0.05);
+      }
+
+      .stat-card {
+        padding: 18px;
+      }
+
+      .stat-card small {
+        color: var(--muted);
+      }
+
+      .stat-card strong {
+        display: block;
+        margin-top: 10px;
+        font-size: 30px;
+      }
+
+      .workspace {
+        display: grid;
+        grid-template-columns: 1.6fr 0.9fr;
+        gap: 18px;
+      }
+
+      .workspace-panel {
+        padding: 18px;
+      }
+
+      .toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-bottom: 16px;
+      }
+
+      .toolbar input,
+      .toolbar select {
+        padding: 10px 12px;
+        border-radius: 12px;
+        border: 1px solid var(--line);
+        background: white;
+        font: inherit;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      th,
+      td {
+        padding: 12px 10px;
+        border-bottom: 1px solid #e6eeea;
+        text-align: left;
+        vertical-align: top;
+      }
+
+      th {
+        color: var(--muted);
+        font-size: 14px;
+        font-weight: 600;
+      }
+
+      .status-chip {
+        display: inline-block;
+        padding: 5px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+      }
+
+      .status-chip.todo {
+        background: var(--warning-soft);
+        color: var(--warning-text);
+      }
+
+      .status-chip.in-progress {
+        background: var(--accent-soft);
+        color: var(--accent);
+      }
+
+      .status-chip.done {
+        background: #e1f4e8;
+        color: #1a7a45;
+      }
+
+      .priority-chip {
+        display: inline-block;
+        padding: 4px 8px;
+        border-radius: 999px;
+        font-size: 12px;
+        background: #f3f5f4;
+      }
+
+      .priority-chip.high {
+        background: var(--danger-soft);
+        color: var(--danger-text);
+      }
+
+      .row-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .empty-state {
+        padding: 22px;
+        border: 1px dashed var(--line);
+        border-radius: 16px;
+        color: var(--muted);
+      }
+
+      .detail-card {
+        padding: 18px;
+      }
+
+      .detail-card h3 {
+        margin: 0 0 12px;
+      }
+
+      .detail-meta {
+        display: grid;
+        gap: 10px;
+        margin-bottom: 16px;
+      }
+
+      .detail-meta div {
+        padding: 12px;
+        border-radius: 14px;
+        background: #f7faf9;
+        border: 1px solid #e6efea;
+      }
+
+      .detail-card p {
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      @media (max-width: 1100px) {
+        .workspace {
+          grid-template-columns: 1fr;
+        }
+
+        .stat-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      @media (max-width: 860px) {
+        .app-shell {
+          grid-template-columns: 1fr;
+        }
+
+        .stat-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <script type="module">
+      import { computed, createApp, ref } from "https://unpkg.com/vue@3/dist/vue.esm-browser.js";
+
+      const seedTasks = [
+        {
+          id: 1,
+          title: "Design lesson overview cards",
+          owner: "Plato",
+          status: "in-progress",
+          priority: "high",
+          area: "Dashboard",
+          notes: "Focus on readable metrics and spacing.",
+        },
+        {
+          id: 2,
+          title: "Build search and filter toolbar",
+          owner: "Plato",
+          status: "todo",
+          priority: "medium",
+          area: "Tasks",
+          notes: "Toolbar should be easy to reuse in later projects.",
+        },
+        {
+          id: 3,
+          title: "Model task detail side panel",
+          owner: "Learner",
+          status: "done",
+          priority: "low",
+          area: "Details",
+          notes: "Keep detail blocks compact and clear.",
+        },
+        {
+          id: 4,
+          title: "Add status transition actions",
+          owner: "Learner",
+          status: "todo",
+          priority: "high",
+          area: "Workflow",
+          notes: "Use one-click status progress for practice.",
+        },
+      ];
+
+      createApp({
+        setup() {
+          const currentSection = ref("Overview");
+          const keyword = ref("");
+          const statusFilter = ref("all");
+          const tasks = ref(structuredClone(seedTasks));
+          const selectedTaskId = ref(tasks.value[0].id);
+
+          const sections = ["Overview", "Tasks", "Settings"];
+
+          const filteredTasks = computed(() => {
+            return tasks.value.filter((task) => {
+              const matchesKeyword = task.title.toLowerCase().includes(keyword.value.trim().toLowerCase());
+              const matchesStatus = statusFilter.value === "all" || task.status === statusFilter.value;
+              return matchesKeyword && matchesStatus;
+            });
+          });
+
+          const selectedTask = computed(() => {
+            return tasks.value.find((task) => task.id === selectedTaskId.value) || null;
+          });
+
+          const todoCount = computed(() => tasks.value.filter((task) => task.status === "todo").length);
+          const inProgressCount = computed(() => tasks.value.filter((task) => task.status === "in-progress").length);
+          const doneCount = computed(() => tasks.value.filter((task) => task.status === "done").length);
+          const highPriorityCount = computed(() => tasks.value.filter((task) => task.priority === "high").length);
+
+          function selectTask(id) {
+            selectedTaskId.value = id;
+          }
+
+          function cycleStatus(id) {
+            const task = tasks.value.find((item) => item.id === id);
+            if (!task) {
+              return;
+            }
+
+            const statusFlow = {
+              todo: "in-progress",
+              "in-progress": "done",
+              done: "todo",
+            };
+
+            task.status = statusFlow[task.status];
+          }
+
+          function resetFilters() {
+            keyword.value = "";
+            statusFilter.value = "all";
+          }
+
+          return {
+            sections,
+            currentSection,
+            keyword,
+            statusFilter,
+            tasks,
+            filteredTasks,
+            selectedTask,
+            todoCount,
+            inProgressCount,
+            doneCount,
+            highPriorityCount,
+            selectTask,
+            cycleStatus,
+            resetFilters,
+          };
+        },
+        template: `
+          <div class="app-shell">
+            <aside class="sidebar">
+              <h1>PFVue</h1>
+              <p>Admin dashboard practice focused on layout, filtering, and task workflows.</p>
+
+              <nav class="sidebar-nav">
+                <button
+                  v-for="section in sections"
+                  :key="section"
+                  :class="{ active: currentSection === section }"
+                  @click="currentSection = section"
+                >
+                  {{ section }}
+                </button>
+              </nav>
+            </aside>
+
+            <main class="content">
+              <section class="topbar">
+                <div>
+                  <h2>Admin Dashboard Playground</h2>
+                  <p>Practice an interface with summary cards, filters, task tables, and a detail panel.</p>
+                </div>
+                <button class="primary-button">New Task</button>
+              </section>
+
+              <section class="stat-grid">
+                <article class="stat-card">
+                  <small>Todo Tasks</small>
+                  <strong>{{ todoCount }}</strong>
+                </article>
+                <article class="stat-card">
+                  <small>In Progress</small>
+                  <strong>{{ inProgressCount }}</strong>
+                </article>
+                <article class="stat-card">
+                  <small>Done</small>
+                  <strong>{{ doneCount }}</strong>
+                </article>
+                <article class="stat-card">
+                  <small>High Priority</small>
+                  <strong>{{ highPriorityCount }}</strong>
+                </article>
+              </section>
+
+              <section class="workspace">
+                <div class="workspace-panel">
+                  <div class="toolbar">
+                    <input v-model="keyword" type="text" placeholder="Search tasks" />
+                    <select v-model="statusFilter">
+                      <option value="all">All statuses</option>
+                      <option value="todo">Todo</option>
+                      <option value="in-progress">In progress</option>
+                      <option value="done">Done</option>
+                    </select>
+                    <button class="ghost-button" @click="resetFilters">Reset</button>
+                  </div>
+
+                  <table v-if="filteredTasks.length > 0">
+                    <thead>
+                      <tr>
+                        <th>Task</th>
+                        <th>Area</th>
+                        <th>Status</th>
+                        <th>Priority</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="task in filteredTasks" :key="task.id">
+                        <td>
+                          <strong>{{ task.title }}</strong>
+                          <div>{{ task.owner }}</div>
+                        </td>
+                        <td>{{ task.area }}</td>
+                        <td>
+                          <span class="status-chip" :class="task.status">{{ task.status }}</span>
+                        </td>
+                        <td>
+                          <span class="priority-chip" :class="task.priority">{{ task.priority }}</span>
+                        </td>
+                        <td>
+                          <div class="row-actions">
+                            <button class="table-action" @click="selectTask(task.id)">View</button>
+                            <button class="status-button" @click="cycleStatus(task.id)">Next Status</button>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+
+                  <div v-else class="empty-state">
+                    No tasks match the current search and filter settings.
+                  </div>
+                </div>
+
+                <aside class="detail-card">
+                  <template v-if="selectedTask">
+                    <h3>{{ selectedTask.title }}</h3>
+                    <div class="detail-meta">
+                      <div><strong>Owner:</strong> {{ selectedTask.owner }}</div>
+                      <div><strong>Area:</strong> {{ selectedTask.area }}</div>
+                      <div><strong>Status:</strong> {{ selectedTask.status }}</div>
+                      <div><strong>Priority:</strong> {{ selectedTask.priority }}</div>
+                    </div>
+                    <p>{{ selectedTask.notes }}</p>
+                  </template>
+                  <template v-else>
+                    <h3>Task Details</h3>
+                    <p>Select a task to inspect its details here.</p>
+                  </template>
+                </aside>
+              </section>
+            </main>
+          </div>
+        `,
+      }).mount("#app");
+    </script>
+  </body>
+</html>
