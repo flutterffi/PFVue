@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>18 Dashboard Mock App</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        background: #f4f6f8;
+      }
+
+      .layout {
+        display: grid;
+        grid-template-columns: 240px 1fr;
+        min-height: 100vh;
+      }
+
+      .sidebar {
+        padding: 24px;
+        background: #143642;
+        color: white;
+      }
+
+      .content {
+        padding: 24px;
+      }
+
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+        margin-bottom: 20px;
+      }
+
+      .card {
+        padding: 20px;
+        background: white;
+        border-radius: 12px;
+      }
+
+      .activity-list {
+        display: grid;
+        gap: 12px;
+      }
+
+      @media (max-width: 800px) {
+        .layout {
+          grid-template-columns: 1fr;
+        }
+
+        .stats {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="layout">
+      <aside class="sidebar">
+        <h1>PFVue Dashboard</h1>
+        <p>Mock admin layout practice.</p>
+      </aside>
+
+      <main class="content">
+        <section class="stats" id="stats"></section>
+        <section class="card">
+          <h2>Recent Activity</h2>
+          <div class="activity-list" id="activity-list"></div>
+        </section>
+      </main>
+    </div>
+
+    <script src="./script.js"></script>
+  </body>
+</html>

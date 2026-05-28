@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>03 CSS Selectors</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 40px;
+      }
+
+      h1 {
+        color: #17324d;
+      }
+
+      .card {
+        border: 1px solid #d7dfe8;
+        padding: 16px;
+        margin-bottom: 12px;
+      }
+
+      .highlight {
+        background: #fff3cd;
+      }
+
+      #main-note {
+        border-left: 4px solid #ff8a00;
+      }
+
+      .card p {
+        margin: 8px 0 0;
+      }
+
+      .card:hover {
+        background: #f8fbff;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Selector Practice</h1>
+
+    <div class="card">
+      <h2>Element Selector</h2>
+      <p>Every heading can be styled by tag name.</p>
+    </div>
+
+    <div class="card highlight" id="main-note">
+      <h2>Class And ID</h2>
+      <p>Classes are reusable. IDs should be unique on the page.</p>
+    </div>
+
+    <div class="card">
+      <h2>Nested Selectors</h2>
+      <p>Target paragraphs inside a card without changing all paragraphs.</p>
+    </div>
+
+    <h2>Try This</h2>
+    <ol>
+      <li>Add a selector for all list items inside a new section.</li>
+      <li>Create a button and style its hover state.</li>
+      <li>Add a second highlight class with a different look.</li>
+    </ol>
+  </body>
+</html>

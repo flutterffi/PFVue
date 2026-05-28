@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>06 Grid Layout</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 32px;
+        background: #fafafa;
+      }
+
+      .dashboard {
+        display: grid;
+        grid-template-columns: 220px 1fr;
+        gap: 16px;
+      }
+
+      .sidebar,
+      .content,
+      .widget {
+        padding: 20px;
+        background: white;
+        border: 1px solid #d9e2ec;
+      }
+
+      .content-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="dashboard">
+      <aside class="sidebar">
+        <h2>Sidebar</h2>
+        <p>Navigation goes here.</p>
+      </aside>
+
+      <main class="content">
+        <h1>Grid Layout Practice</h1>
+        <div class="content-grid">
+          <section class="widget">Widget 1</section>
+          <section class="widget">Widget 2</section>
+          <section class="widget">Widget 3</section>
+          <section class="widget">Widget 4</section>
+        </div>
+      </main>
+    </div>
+
+    <h2>Try This</h2>
+    <ol>
+      <li>Change the widget grid to three columns.</li>
+      <li>Make Widget 1 span two columns.</li>
+      <li>Turn the whole layout into a single column on mobile.</li>
+    </ol>
+  </body>
+</html>

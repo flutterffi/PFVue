@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>02 Forms And Inputs</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 720px;
+        margin: 40px auto;
+        padding: 0 16px;
+      }
+
+      form {
+        display: grid;
+        gap: 12px;
+      }
+
+      label,
+      fieldset {
+        display: grid;
+        gap: 6px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Study Profile Form</h1>
+
+    <form>
+      <label>
+        Name
+        <input type="text" name="name" placeholder="Your name" />
+      </label>
+
+      <label>
+        Email
+        <input type="email" name="email" placeholder="you@example.com" />
+      </label>
+
+      <label>
+        Favorite Frontend Topic
+        <select name="topic">
+          <option>HTML</option>
+          <option>CSS</option>
+          <option>JavaScript</option>
+          <option>Vue 3</option>
+        </select>
+      </label>
+
+      <fieldset>
+        <legend>Current Level</legend>
+        <label><input type="radio" name="level" value="beginner" /> Beginner</label>
+        <label><input type="radio" name="level" value="intermediate" /> Intermediate</label>
+        <label><input type="radio" name="level" value="advanced" /> Advanced</label>
+      </fieldset>
+
+      <label>
+        Practice Goals
+        <textarea name="goals" rows="4" placeholder="Write your goals"></textarea>
+      </label>
+
+      <label>
+        <input type="checkbox" name="daily" />
+        I want to practice daily
+      </label>
+
+      <button type="submit">Submit</button>
+    </form>
+
+    <h2>Try This</h2>
+    <ol>
+      <li>Add a password field and a date field.</li>
+      <li>Mark two important fields as required.</li>
+      <li>Add a reset button and explain what it does.</li>
+    </ol>
+  </body>
+</html>

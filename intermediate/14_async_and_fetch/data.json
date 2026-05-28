@@ -1,0 +1,17 @@
+[
+  {
+    "id": 1,
+    "title": "Review Flexbox",
+    "status": "done"
+  },
+  {
+    "id": 2,
+    "title": "Practice fetch",
+    "status": "active"
+  },
+  {
+    "id": 3,
+    "title": "Start Vue 3 core",
+    "status": "planned"
+  }
+]

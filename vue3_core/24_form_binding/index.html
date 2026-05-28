@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>24 Form Binding</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 760px;
+        margin: 40px auto;
+        padding: 0 16px;
+      }
+
+      form,
+      .summary {
+        display: grid;
+        gap: 12px;
+      }
+
+      input,
+      select,
+      textarea {
+        padding: 10px 12px;
+      }
+
+      .summary {
+        margin-top: 20px;
+        border: 1px solid #d7dfe8;
+        padding: 16px;
+        border-radius: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <script type="module">
+      import { createApp, reactive } from "https://unpkg.com/vue@3/dist/vue.esm-browser.js";
+
+      createApp({
+        setup() {
+          const form = reactive({
+            name: "",
+            level: "beginner",
+            topic: "Vue 3",
+            notes: "",
+          });
+
+          return {
+            form,
+          };
+        },
+        template: `
+          <section>
+            <h1>Form Binding</h1>
+            <form>
+              <label>
+                Name
+                <input v-model="form.name" type="text" placeholder="Your name" />
+              </label>
+
+              <label>
+                Level
+                <select v-model="form.level">
+                  <option value="beginner">Beginner</option>
+                  <option value="intermediate">Intermediate</option>
+                  <option value="advanced">Advanced</option>
+                </select>
+              </label>
+
+              <label>
+                Current Topic
+                <input v-model="form.topic" type="text" />
+              </label>
+
+              <label>
+                Notes
+                <textarea v-model="form.notes" rows="4"></textarea>
+              </label>
+            </form>
+
+            <div class="summary">
+              <h2>Live Summary</h2>
+              <p>Name: {{ form.name || "Not set yet" }}</p>
+              <p>Level: {{ form.level }}</p>
+              <p>Topic: {{ form.topic }}</p>
+              <p>Notes: {{ form.notes || "No notes yet" }}</p>
+            </div>
+          </section>
+        `,
+      }).mount("#app");
+    </script>
+  </body>
+</html>

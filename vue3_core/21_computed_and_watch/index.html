@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>21 Computed And Watch</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 760px;
+        margin: 40px auto;
+        padding: 0 16px;
+      }
+
+      .panel {
+        display: grid;
+        gap: 12px;
+        border: 1px solid #d7dfe8;
+        padding: 20px;
+        border-radius: 12px;
+      }
+
+      input {
+        padding: 10px 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <script type="module">
+      import {
+        computed,
+        createApp,
+        ref,
+        watch,
+      } from "https://unpkg.com/vue@3/dist/vue.esm-browser.js";
+
+      createApp({
+        setup() {
+          const hours = ref(1);
+          const logMessage = ref("Waiting for updates...");
+
+          const weeklyHours = computed(() => hours.value * 7);
+          const level = computed(() => {
+            if (hours.value >= 3) return "Advanced effort";
+            if (hours.value >= 2) return "Intermediate effort";
+            return "Beginner effort";
+          });
+
+          watch(hours, (newValue, oldValue) => {
+            logMessage.value = `Hours changed from ${oldValue} to ${newValue}.`;
+          });
+
+          return {
+            hours,
+            weeklyHours,
+            level,
+            logMessage,
+          };
+        },
+        template: `
+          <section class="panel">
+            <h1>Computed And Watch</h1>
+            <label>
+              Daily study hours
+              <input v-model.number="hours" type="number" min="1" max="8" />
+            </label>
+            <p>Weekly total: {{ weeklyHours }} hours</p>
+            <p>Effort level: {{ level }}</p>
+            <p>{{ logMessage }}</p>
+          </section>
+        `,
+      }).mount("#app");
+    </script>
+  </body>
+</html>

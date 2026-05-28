@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>31 Table Form Dialog Patterns</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 920px;
+        margin: 40px auto;
+        padding: 0 16px;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 16px;
+      }
+
+      th,
+      td {
+        border: 1px solid #d7dfe8;
+        padding: 10px 12px;
+        text-align: left;
+      }
+
+      .dialog {
+        margin-top: 20px;
+        padding: 16px;
+        border: 1px solid #d7dfe8;
+        border-radius: 12px;
+      }
+
+      .toolbar {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        margin: 16px 0;
+      }
+
+      .field {
+        display: grid;
+        gap: 6px;
+        margin-bottom: 12px;
+      }
+
+      .actions {
+        display: flex;
+        gap: 8px;
+      }
+
+      .error {
+        color: #b42318;
+        margin: 0 0 12px;
+      }
+
+      .empty-state {
+        margin-top: 16px;
+        padding: 16px;
+        border: 1px dashed #d7dfe8;
+        border-radius: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <script type="module">
+      import {
+        computed,
+        createApp,
+        reactive,
+        ref,
+        watch,
+      } from "https://unpkg.com/vue@3/dist/vue.esm-browser.js";
+
+      createApp({
+        setup() {
+          const storageKey = "pfvue-table-form-dialog-patterns";
+          const defaultRows = [
+            { id: 1, title: "Build filters", status: "active" },
+            { id: 2, title: "Add edit dialog", status: "planned" },
+          ];
+          const savedRows = JSON.parse(localStorage.getItem(storageKey) || "null");
+          const rows = ref(Array.isArray(savedRows) ? savedRows : defaultRows);
+
+          const dialogOpen = ref(false);
+          const editingId = ref(null);
+          const statusFilter = ref("all");
+          const errorMessage = ref("");
+          const form = reactive({
+            title: "",
+            status: "planned",
+          });
+
+          const filteredRows = computed(() => {
+            if (statusFilter.value === "all") {
+              return rows.value;
+            }
+
+            return rows.value.filter((row) => row.status === statusFilter.value);
+          });
+
+          watch(
+            rows,
+            (value) => {
+              localStorage.setItem(storageKey, JSON.stringify(value));
+            },
+            { deep: true }
+          );
+
+          function resetForm() {
+            form.title = "";
+            form.status = "planned";
+            errorMessage.value = "";
+            editingId.value = null;
+          }
+
+          function openDialog() {
+            resetForm();
+            dialogOpen.value = true;
+          }
+
+          function openEditDialog(row) {
+            form.title = row.title;
+            form.status = row.status;
+            editingId.value = row.id;
+            errorMessage.value = "";
+            dialogOpen.value = true;
+          }
+
+          function closeDialog() {
+            resetForm();
+            dialogOpen.value = false;
+          }
+
+          function saveRow() {
+            const trimmedTitle = form.title.trim();
+
+            if (!trimmedTitle) {
+              errorMessage.value = "Title is required.";
+              return;
+            }
+
+            if (editingId.value) {
+              const row = rows.value.find((item) => item.id === editingId.value);
+              if (row) {
+                row.title = trimmedTitle;
+                row.status = form.status;
+              }
+            } else {
+              rows.value.push({
+                id: Date.now(),
+                title: trimmedTitle,
+                status: form.status,
+              });
+            }
+
+            closeDialog();
+          }
+
+          function deleteRow(id) {
+            rows.value = rows.value.filter((row) => row.id !== id);
+          }
+
+          return {
+            filteredRows,
+            dialogOpen,
+            editingId,
+            statusFilter,
+            errorMessage,
+            form,
+            openDialog,
+            openEditDialog,
+            closeDialog,
+            saveRow,
+            deleteRow,
+          };
+        },
+        template: `
+          <section>
+            <h1>Table, Form, Dialog Patterns</h1>
+            <div class="toolbar">
+              <button @click="openDialog">Add Row</button>
+              <label>
+                Filter by status
+                <select v-model="statusFilter">
+                  <option value="all">all</option>
+                  <option value="planned">planned</option>
+                  <option value="active">active</option>
+                  <option value="done">done</option>
+                </select>
+              </label>
+            </div>
+
+            <table v-if="filteredRows.length > 0">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="row in filteredRows" :key="row.id">
+                  <td>{{ row.title }}</td>
+                  <td>{{ row.status }}</td>
+                  <td>
+                    <div class="actions">
+                      <button @click="openEditDialog(row)">Edit</button>
+                      <button @click="deleteRow(row.id)">Delete</button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div v-else class="empty-state">
+              No rows match the current filter.
+            </div>
+
+            <div v-if="dialogOpen" class="dialog">
+              <h2>{{ editingId ? "Edit Item" : "Create Item" }}</h2>
+              <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
+
+              <label class="field">
+                Title
+                <input v-model="form.title" type="text" />
+              </label>
+
+              <label class="field">
+                Status
+                <select v-model="form.status">
+                  <option value="planned">planned</option>
+                  <option value="active">active</option>
+                  <option value="done">done</option>
+                </select>
+              </label>
+
+              <div class="actions">
+                <button @click="saveRow">{{ editingId ? "Update" : "Save" }}</button>
+                <button @click="closeDialog">Cancel</button>
+              </div>
+            </div>
+          </section>
+        `,
+      }).mount("#app");
+    </script>
+  </body>
+</html>

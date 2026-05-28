@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>26 Composables</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 760px;
+        margin: 40px auto;
+        padding: 0 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <script type="module">
+      import { createApp } from "https://unpkg.com/vue@3/dist/vue.esm-browser.js";
+      import { useCounter } from "./useCounter.js";
+
+      createApp({
+        setup() {
+          const { count, increment, decrement } = useCounter(3);
+          return { count, increment, decrement };
+        },
+        template: `
+          <section>
+            <h1>Composables</h1>
+            <p>Reusable logic lives in a function like <code>useCounter</code>.</p>
+            <p>Count: {{ count }}</p>
+            <button @click="decrement">-</button>
+            <button @click="increment">+</button>
+          </section>
+        `,
+      }).mount("#app");
+    </script>
+  </body>
+</html>

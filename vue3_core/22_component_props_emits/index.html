@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>22 Component Props Emits</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 0 16px;
+      }
+
+      .lesson-card {
+        border: 1px solid #d7dfe8;
+        padding: 16px;
+        border-radius: 12px;
+        margin-bottom: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <script type="module">
+      import { createApp, ref } from "https://unpkg.com/vue@3/dist/vue.esm-browser.js";
+
+      const LessonCard = {
+        props: {
+          title: String,
+          completed: Boolean,
+        },
+        emits: ["toggle"],
+        template: `
+          <article class="lesson-card">
+            <h2>{{ title }}</h2>
+            <p>Status: {{ completed ? "Completed" : "Active" }}</p>
+            <button @click="$emit('toggle')">
+              {{ completed ? "Mark Active" : "Mark Completed" }}
+            </button>
+          </article>
+        `,
+      };
+
+      createApp({
+        components: {
+          LessonCard,
+        },
+        setup() {
+          const lessons = ref([
+            { id: 1, title: "Template Syntax", completed: true },
+            { id: 2, title: "Reactivity Basics", completed: false },
+          ]);
+
+          function toggleLesson(id) {
+            const lesson = lessons.value.find((item) => item.id === id);
+            if (lesson) {
+              lesson.completed = !lesson.completed;
+            }
+          }
+
+          return {
+            lessons,
+            toggleLesson,
+          };
+        },
+        template: `
+          <section>
+            <h1>Props And Emits</h1>
+            <lesson-card
+              v-for="lesson in lessons"
+              :key="lesson.id"
+              :title="lesson.title"
+              :completed="lesson.completed"
+              @toggle="toggleLesson(lesson.id)"
+            />
+          </section>
+        `,
+      }).mount("#app");
+    </script>
+  </body>
+</html>

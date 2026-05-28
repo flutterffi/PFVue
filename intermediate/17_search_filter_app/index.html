@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>17 Search Filter App</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 820px;
+        margin: 40px auto;
+        padding: 0 16px;
+      }
+
+      .controls {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 20px;
+      }
+
+      input,
+      select {
+        padding: 10px 12px;
+      }
+
+      .card {
+        border: 1px solid #d7dfe8;
+        padding: 16px;
+        margin-bottom: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Search And Filter App</h1>
+
+    <div class="controls">
+      <input id="search-input" type="text" placeholder="Search topics" />
+      <select id="level-filter">
+        <option value="all">All levels</option>
+        <option value="beginner">Beginner</option>
+        <option value="intermediate">Intermediate</option>
+        <option value="advanced">Advanced</option>
+      </select>
+    </div>
+
+    <div id="results"></div>
+
+    <script src="./script.js"></script>
+  </body>
+</html>

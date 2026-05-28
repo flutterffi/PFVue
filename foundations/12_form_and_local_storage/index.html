@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>12 Form And Local Storage</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 720px;
+        margin: 40px auto;
+        padding: 0 16px;
+      }
+
+      form {
+        display: grid;
+        gap: 12px;
+      }
+
+      input,
+      button {
+        padding: 10px 12px;
+      }
+
+      .result {
+        margin-top: 20px;
+        padding: 16px;
+        background: #eef6ff;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Save A Study Plan</h1>
+
+    <form id="study-form">
+      <input id="topic" type="text" placeholder="Topic to practice" />
+      <input id="minutes" type="number" placeholder="Minutes today" />
+      <button type="submit">Save Plan</button>
+    </form>
+
+    <section class="result">
+      <h2>Saved Plan</h2>
+      <p id="output">Nothing saved yet.</p>
+    </section>
+
+    <script src="./script.js"></script>
+  </body>
+</html>

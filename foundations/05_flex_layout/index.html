@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>05 Flex Layout</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 32px;
+      }
+
+      .toolbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        padding: 16px;
+        background: #143642;
+        color: white;
+      }
+
+      .actions {
+        display: flex;
+        gap: 12px;
+      }
+
+      .cards {
+        display: flex;
+        gap: 16px;
+        margin-top: 24px;
+      }
+
+      .card {
+        flex: 1;
+        padding: 20px;
+        background: #e8f1f2;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="toolbar">
+      <strong>PFVue Flex Practice</strong>
+      <div class="actions">
+        <button>Search</button>
+        <button>Profile</button>
+      </div>
+    </header>
+
+    <section class="cards">
+      <article class="card">Card A</article>
+      <article class="card">Card B</article>
+      <article class="card">Card C</article>
+    </section>
+
+    <h2>Try This</h2>
+    <ol>
+      <li>Change the cards to stack vertically.</li>
+      <li>Make the middle card wider than the others.</li>
+      <li>Center the toolbar content on small screens.</li>
+    </ol>
+  </body>
+</html>

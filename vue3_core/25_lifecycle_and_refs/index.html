@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>25 Lifecycle And Refs</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 760px;
+        margin: 40px auto;
+        padding: 0 16px;
+      }
+
+      .panel {
+        display: grid;
+        gap: 12px;
+        border: 1px solid #d7dfe8;
+        padding: 20px;
+        border-radius: 12px;
+      }
+
+      input,
+      button {
+        padding: 10px 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <script type="module">
+      import {
+        createApp,
+        onMounted,
+        ref,
+      } from "https://unpkg.com/vue@3/dist/vue.esm-browser.js";
+
+      createApp({
+        setup() {
+          const inputRef = ref(null);
+          const mountMessage = ref("Waiting for mount...");
+
+          onMounted(() => {
+            mountMessage.value = "Component mounted. Input focused with a template ref.";
+            inputRef.value.focus();
+          });
+
+          function logInputValue() {
+            console.log("Current input value:", inputRef.value.value);
+          }
+
+          return {
+            inputRef,
+            mountMessage,
+            logInputValue,
+          };
+        },
+        template: `
+          <section class="panel">
+            <h1>Lifecycle And Template Refs</h1>
+            <p>{{ mountMessage }}</p>
+            <input ref="inputRef" type="text" placeholder="Type something here" />
+            <button @click="logInputValue">Log Input Value</button>
+          </section>
+        `,
+      }).mount("#app");
+    </script>
+  </body>
+</html>

@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>04 Box Model</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 32px;
+        background: #f4f7fb;
+      }
+
+      .wrapper {
+        max-width: 720px;
+        margin: 0 auto;
+      }
+
+      .panel {
+        width: 100%;
+        padding: 24px;
+        border: 4px solid #235789;
+        margin-bottom: 20px;
+        background: white;
+      }
+
+      .badge {
+        display: inline-block;
+        padding: 8px 12px;
+        border: 2px solid #ef476f;
+        margin-top: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="panel">
+        <h1>Box Model Practice</h1>
+        <p>Inspect this card and identify content, padding, border, and margin.</p>
+        <span class="badge">Spacing Matters</span>
+      </div>
+
+      <div class="panel">
+        <h2>Try This</h2>
+        <ol>
+          <li>Increase the padding and compare the visual change.</li>
+          <li>Add margin to the badge on the left side.</li>
+          <li>Remove <code>box-sizing: border-box</code> and inspect the difference.</li>
+        </ol>
+      </div>
+    </div>
+  </body>
+</html>

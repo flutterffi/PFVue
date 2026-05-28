@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>20 Ref And Reactive</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 760px;
+        margin: 40px auto;
+        padding: 0 16px;
+      }
+
+      .panel {
+        display: grid;
+        gap: 12px;
+        border: 1px solid #d7dfe8;
+        padding: 20px;
+        border-radius: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <script type="module">
+      import {
+        createApp,
+        reactive,
+        ref,
+      } from "https://unpkg.com/vue@3/dist/vue.esm-browser.js";
+
+      createApp({
+        setup() {
+          const count = ref(0);
+          const learner = reactive({
+            name: "Plato",
+            target: "Build Vue 3 projects",
+            completedLessons: 2,
+          });
+
+          function increment() {
+            count.value += 1;
+            learner.completedLessons += 1;
+          }
+
+          return {
+            count,
+            learner,
+            increment,
+          };
+        },
+        template: `
+          <section class="panel">
+            <h1>Ref And Reactive</h1>
+            <p>Button clicks: {{ count }}</p>
+            <p>{{ learner.name }} wants to {{ learner.target }}.</p>
+            <p>Completed lessons: {{ learner.completedLessons }}</p>
+            <button @click="increment">Practice Reactivity</button>
+          </section>
+        `,
+      }).mount("#app");
+    </script>
+  </body>
+</html>

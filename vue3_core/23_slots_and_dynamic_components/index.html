@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>23 Slots And Dynamic Components</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 820px;
+        margin: 40px auto;
+        padding: 0 16px;
+      }
+
+      .panel,
+      .tab-card {
+        border: 1px solid #d7dfe8;
+        border-radius: 12px;
+        padding: 16px;
+      }
+
+      .tab-list {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <script type="module">
+      import { createApp, ref } from "https://unpkg.com/vue@3/dist/vue.esm-browser.js";
+
+      const PanelCard = {
+        template: `
+          <section class="panel">
+            <header>
+              <slot name="title"></slot>
+            </header>
+            <div>
+              <slot></slot>
+            </div>
+          </section>
+        `,
+      };
+
+      const OverviewTab = {
+        template: `<div class="tab-card"><h3>Overview</h3><p>Review what Vue solves in the UI layer.</p></div>`,
+      };
+
+      const PracticeTab = {
+        template: `<div class="tab-card"><h3>Practice</h3><p>Build one small component and one small page today.</p></div>`,
+      };
+
+      createApp({
+        components: {
+          PanelCard,
+          OverviewTab,
+          PracticeTab,
+        },
+        setup() {
+          const currentTab = ref("OverviewTab");
+
+          return {
+            currentTab,
+          };
+        },
+        template: `
+          <panel-card>
+            <template #title>
+              <h1>Slots And Dynamic Components</h1>
+            </template>
+
+            <div class="tab-list">
+              <button @click="currentTab = 'OverviewTab'">Overview</button>
+              <button @click="currentTab = 'PracticeTab'">Practice</button>
+            </div>
+
+            <component :is="currentTab" />
+          </panel-card>
+        `,
+      }).mount("#app");
+    </script>
+  </body>
+</html>
