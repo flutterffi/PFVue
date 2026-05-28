@@ -2,6 +2,12 @@
 
 This folder is for end-to-end practice.
 
+Role of this folder:
+
+- use it after `vue3_core/`
+- practice page-level features before moving into the formal `app/` workspace
+- focus on implementation flow more than project tooling
+
 Suggested order:
 
 1. `01_component_playground`

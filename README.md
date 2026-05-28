@@ -10,6 +10,67 @@ The goal is simple:
 - build real project instincts instead of stopping at demos
 - leave room for TypeScript, routing, state management, testing, and project architecture
 
+## Two Layers
+
+This repository now has two complementary layers:
+
+1. lesson-first practice folders for step-by-step training
+2. a real Vite + Vue 3 app workspace in `app/` for formal project structure practice
+
+Use them together:
+
+- learn syntax and concepts in `foundations/`, `intermediate/`, `vue3_core/`, and `advanced/`
+- apply them in `projects/`
+- then move into `app/` to practice real routing, Pinia state, source structure, and mock API flow
+
+## Formal App Workspace
+
+The `app/` directory is a real Vite + Vue 3 workspace.
+
+It includes:
+
+- Vite project structure
+- Vue Router
+- Pinia
+- mock API modules
+- composables
+- page and component separation
+
+Open this guide first:
+
+- `app/README.md`
+
+Then study these files in order:
+
+1. `app/src/main.js`
+2. `app/src/router/index.js`
+3. `app/src/stores/session.js`
+4. `app/src/stores/tasks.js`
+5. `app/src/views/DashboardView.vue`
+6. `app/src/components/TaskEditor.vue`
+
+## Official Learning Links
+
+For a concentrated list of official frontend, Vue, Vite, Router, and Pinia learning resources, open:
+
+- `docs/official-learning-links.md`
+
+## Start Here
+
+If you want the simplest navigation path through this repository, open these files first:
+
+1. `docs/README.md`
+2. `docs/practice-map.md`
+3. `docs/folder-guide.md`
+4. `docs/official-learning-links.md`
+
+This gives you:
+
+- the repository map
+- the folder roles
+- the official doc links
+- the best route for your current level
+
 ## Learning Path
 
 ### 1. Foundations
@@ -293,6 +354,7 @@ Good modifications to try:
 
 ```text
 PFVue/
+  app/              # real Vite + Vue 3 application workspace
   foundations/      # HTML, CSS, JS syntax drills
   intermediate/     # DOM, async, modules, browser mini apps
   vue3_core/        # Vue 3 essentials

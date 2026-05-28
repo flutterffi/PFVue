@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- added a formal `app/` workspace powered by Vite and Vue 3
+- introduced Vue Router, Pinia stores, mock API modules, and composables
+- added a structured dashboard flow with login, routing, list filtering, and task editing
+
 ## v0.1.0
 
 - scaffolded the PFVue learning repository from frontend foundations to advanced Vue 3 topics
