@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## v0.5.0
 
 - added a formal `app/` workspace powered by Vite and Vue 3
 - introduced Vue Router, Pinia stores, mock API modules, and composables
