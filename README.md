@@ -63,6 +63,7 @@ If you want the simplest navigation path through this repository, open these fil
 2. `docs/practice-map.md`
 3. `docs/folder-guide.md`
 4. `docs/official-learning-links.md`
+5. `docs/vue-official-roadmap.md`
 
 This gives you:
 
@@ -70,6 +71,7 @@ This gives you:
 - the folder roles
 - the official doc links
 - the best route for your current level
+- a Vue official-guide-aligned study route
 
 ## Learning Path
 

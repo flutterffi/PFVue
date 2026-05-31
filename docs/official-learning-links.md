@@ -7,6 +7,10 @@ Use it together with the local practice repository:
 - learn the concept from the official docs
 - come back to PFVue and modify the matching lesson or app file
 
+If you want the same material reorganized around the official Vue guide structure, also open:
+
+- `vue-official-roadmap.md`
+
 ## 1. Frontend Foundations
 
 ### HTML
