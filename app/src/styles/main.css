@@ -217,6 +217,11 @@ textarea {
   border-radius: 12px;
 }
 
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
 .primary-button {
   border: 1px solid var(--accent);
   background: var(--accent);
@@ -228,6 +233,11 @@ textarea {
   border: 1px solid var(--line);
   background: white;
   color: var(--text);
+}
+
+.danger-button {
+  border-color: #f2c7c7;
+  color: #b42318;
 }
 
 input,
@@ -254,6 +264,36 @@ label {
 
 .editor-panel {
   min-height: 100%;
+}
+
+.editor-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+}
+
+.field-error {
+  color: #b42318;
+}
+
+.feedback-banner {
+  margin-bottom: 18px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+}
+
+.feedback-banner.success {
+  background: var(--success-soft);
+  color: var(--success);
+  border-color: #bfe8dc;
+}
+
+.feedback-banner.error {
+  background: #fdecec;
+  color: #b42318;
+  border-color: #f3c8c8;
 }
 
 @media (max-width: 980px) {

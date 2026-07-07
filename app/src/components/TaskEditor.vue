@@ -6,9 +6,13 @@ const props = defineProps({
     type: Object,
     default: null,
   },
+  saving: {
+    type: Boolean,
+    default: false,
+  },
 });
 
-const emit = defineEmits(["save", "create"]);
+const emit = defineEmits(["save", "create", "delete"]);
 
 const form = reactive({
   title: "",
@@ -18,9 +22,17 @@ const form = reactive({
   description: "",
 });
 
+const errors = reactive({
+  title: "",
+  assignee: "",
+});
+
 watch(
   () => props.task,
   (task) => {
+    errors.title = "";
+    errors.assignee = "";
+
     if (!task) {
       form.title = "";
       form.status = "todo";
@@ -41,6 +53,21 @@ watch(
 
 function submitUpdate() {
   if (!props.task) {
+    return;
+  }
+
+  errors.title = "";
+  errors.assignee = "";
+
+  if (!form.title.trim()) {
+    errors.title = "Title is required.";
+  }
+
+  if (!form.assignee.trim()) {
+    errors.assignee = "Assignee is required.";
+  }
+
+  if (errors.title || errors.assignee) {
     return;
   }
 
@@ -76,6 +103,7 @@ function submitCreate() {
         <label>
           Title
           <input v-model="form.title" type="text" />
+          <small v-if="errors.title" class="field-error">{{ errors.title }}</small>
         </label>
 
         <label>
@@ -99,6 +127,7 @@ function submitCreate() {
         <label>
           Assignee
           <input v-model="form.assignee" type="text" />
+          <small v-if="errors.assignee" class="field-error">{{ errors.assignee }}</small>
         </label>
 
         <label>
@@ -107,13 +136,22 @@ function submitCreate() {
         </label>
       </div>
 
-      <button class="primary-button" @click="submitUpdate">Save Changes</button>
+      <div class="editor-actions">
+        <button class="primary-button" :disabled="saving" @click="submitUpdate">
+          {{ saving ? "Saving..." : "Save Changes" }}
+        </button>
+        <button class="ghost-button danger-button" :disabled="saving" @click="emit('delete', task.id)">
+          Delete Task
+        </button>
+      </div>
     </template>
 
     <template v-else>
       <h2>No Task Selected</h2>
       <p>Select a task from the list, or create a fresh one to practice the workflow.</p>
-      <button class="primary-button" @click="submitCreate">Create Starter Task</button>
+      <button class="primary-button" :disabled="saving" @click="submitCreate">
+        {{ saving ? "Creating..." : "Create Starter Task" }}
+      </button>
     </template>
   </aside>
 </template>

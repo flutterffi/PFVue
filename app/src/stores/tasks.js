@@ -1,12 +1,13 @@
 import { computed, ref } from "vue";
 import { defineStore } from "pinia";
-import { createTask, getTasks, updateTask } from "@/api/taskApi";
+import { createTask, deleteTask, getTasks, updateTask } from "@/api/taskApi";
 
 export const useTaskStore = defineStore("tasks", () => {
   const tasks = ref([]);
   const loading = ref(false);
   const error = ref("");
   const selectedTaskId = ref(null);
+  const saving = ref(false);
 
   const selectedTask = computed(() => {
     return tasks.value.find((task) => task.id === selectedTaskId.value) || null;
@@ -39,16 +40,46 @@ export const useTaskStore = defineStore("tasks", () => {
   }
 
   async function addTask(payload) {
-    const newTask = await createTask(payload);
-    tasks.value.unshift(newTask);
-    selectedTaskId.value = newTask.id;
+    saving.value = true;
+
+    try {
+      const newTask = await createTask(payload);
+      tasks.value.unshift(newTask);
+      selectedTaskId.value = newTask.id;
+      return newTask;
+    } finally {
+      saving.value = false;
+    }
   }
 
   async function saveTask(id, payload) {
-    const updated = await updateTask(id, payload);
-    const index = tasks.value.findIndex((task) => task.id === id);
-    if (index >= 0) {
-      tasks.value[index] = updated;
+    saving.value = true;
+
+    try {
+      const updated = await updateTask(id, payload);
+      const index = tasks.value.findIndex((task) => task.id === id);
+      if (index >= 0) {
+        tasks.value[index] = updated;
+      }
+
+      return updated;
+    } finally {
+      saving.value = false;
+    }
+  }
+
+  async function removeTaskById(id) {
+    saving.value = true;
+
+    try {
+      await deleteTask(id);
+      tasks.value = tasks.value.filter((task) => task.id !== id);
+
+      if (selectedTaskId.value === id) {
+        selectedTaskId.value = tasks.value[0]?.id ?? null;
+      }
+    } finally {
+      saving.value = false;
     }
   }
 
@@ -56,15 +87,36 @@ export const useTaskStore = defineStore("tasks", () => {
     selectedTaskId.value = id;
   }
 
+  async function advanceTaskStatus(id) {
+    const task = tasks.value.find((item) => item.id === id);
+    if (!task) {
+      throw new Error("Task not found.");
+    }
+
+    const nextStatusByCurrent = {
+      todo: "in-progress",
+      "in-progress": "done",
+      done: "todo",
+    };
+
+    return saveTask(id, {
+      ...task,
+      status: nextStatusByCurrent[task.status],
+    });
+  }
+
   return {
     tasks,
     loading,
     error,
+    saving,
     selectedTask,
     summary,
     fetchTasks,
     addTask,
     saveTask,
+    removeTaskById,
+    advanceTaskStatus,
     selectTask,
   };
 });

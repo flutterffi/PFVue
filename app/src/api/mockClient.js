@@ -86,3 +86,18 @@ export async function patchTask(id, payload) {
   writeTasks(tasks);
   return updatedTask;
 }
+
+export async function removeTask(id) {
+  await wait();
+  const tasks = readTasks();
+  const nextTasks = tasks.filter((task) => task.id !== id);
+
+  if (nextTasks.length === tasks.length) {
+    throw new Error("Task not found.");
+  }
+
+  writeTasks(nextTasks);
+  return {
+    id,
+  };
+}

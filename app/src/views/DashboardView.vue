@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
 import { storeToRefs } from "pinia";
 import AppShell from "@/components/AppShell.vue";
 import SummaryCards from "@/components/SummaryCards.vue";
@@ -12,19 +12,61 @@ import { useTaskStore } from "@/stores/tasks";
 
 const sessionStore = useSessionStore();
 const taskStore = useTaskStore();
-const { tasks, loading, error, selectedTask, summary } = storeToRefs(taskStore);
+const { tasks, loading, error, saving, selectedTask, summary } = storeToRefs(taskStore);
 const { keyword, status, filteredTasks, resetFilters } = useTaskFilters(tasks);
+const banner = ref({
+  type: "",
+  message: "",
+});
 
 onMounted(() => {
   taskStore.fetchTasks();
 });
 
 async function handleSave({ id, payload }) {
-  await taskStore.saveTask(id, payload);
+  try {
+    await taskStore.saveTask(id, payload);
+    showBanner("success", "Task changes saved.");
+  } catch (saveError) {
+    showBanner("error", saveError.message);
+  }
 }
 
 async function handleCreate(payload) {
-  await taskStore.addTask(payload);
+  try {
+    await taskStore.addTask(payload);
+    showBanner("success", "Starter task created.");
+  } catch (createError) {
+    showBanner("error", createError.message);
+  }
+}
+
+async function handleDelete(id) {
+  try {
+    await taskStore.removeTaskById(id);
+    showBanner("success", "Task deleted.");
+  } catch (deleteError) {
+    showBanner("error", deleteError.message);
+  }
+}
+
+async function handleQuickStatus(id) {
+  try {
+    await taskStore.advanceTaskStatus(id);
+    showBanner("success", "Task status advanced.");
+  } catch (statusError) {
+    showBanner("error", statusError.message);
+  }
+}
+
+function showBanner(type, message) {
+  banner.value = { type, message };
+
+  window.setTimeout(() => {
+    if (banner.value.message === message) {
+      banner.value = { type: "", message: "" };
+    }
+  }, 2400);
 }
 </script>
 
@@ -51,6 +93,9 @@ async function handleCreate(payload) {
     />
 
     <p v-if="error" class="error-copy">{{ error }}</p>
+    <div v-if="banner.message" class="feedback-banner" :class="banner.type">
+      {{ banner.message }}
+    </div>
 
     <section class="workspace-grid">
       <TaskList
@@ -58,12 +103,16 @@ async function handleCreate(payload) {
         :selected-task-id="selectedTask?.id ?? null"
         :loading="loading"
         @select="taskStore.selectTask"
+        @quick-status="handleQuickStatus"
+        @delete="handleDelete"
       />
 
       <TaskEditor
         :task="selectedTask"
+        :saving="saving"
         @save="handleSave"
         @create="handleCreate"
+        @delete="handleDelete"
       />
     </section>
   </AppShell>
