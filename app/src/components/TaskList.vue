@@ -1,4 +1,6 @@
 <script setup>
+import SectionHeader from "@/components/SectionHeader.vue";
+import StateNotice from "@/components/StateNotice.vue";
 import StatusBadge from "@/components/StatusBadge.vue";
 
 defineProps({
@@ -33,11 +35,19 @@ const emit = defineEmits(["select", "open-detail", "quick-status", "delete", "pr
 
 <template>
   <section class="panel">
-    <div v-if="loading" class="empty-state">Loading tasks...</div>
+    <SectionHeader
+      eyebrow="Task Board"
+      title="Task Collection"
+      description="Use the list to practice selection, routing, quick actions, and pagination."
+    />
 
-    <div v-else-if="tasks.length === 0" class="empty-state">
-      No tasks match the current filters.
-    </div>
+    <StateNotice v-if="loading" title="Loading tasks" message="The mock API is preparing the current task set." />
+
+    <StateNotice
+      v-else-if="tasks.length === 0"
+      title="No matching tasks"
+      message="Adjust the current filters or create a new starter task to keep practicing."
+    />
 
     <div v-else class="task-list">
       <article

@@ -1,4 +1,7 @@
 <script setup>
+import SectionHeader from "@/components/SectionHeader.vue";
+import StateNotice from "@/components/StateNotice.vue";
+
 defineProps({
   items: {
     type: Array,
@@ -22,9 +25,17 @@ function formatDate(value) {
 
 <template>
   <section class="panel activity-panel">
-    <h2>Recent Activity</h2>
+    <SectionHeader
+      eyebrow="Timeline"
+      title="Recent Activity"
+      description="A compact feed helps practice small dashboard modules and lightweight data summaries."
+    />
 
-    <div v-if="items.length === 0" class="empty-state">No recent task activity yet.</div>
+    <StateNotice
+      v-if="items.length === 0"
+      title="No activity yet"
+      message="Recent updates will appear here after tasks are created or edited."
+    />
 
     <div v-else class="activity-list">
       <article v-for="item in items" :key="item.id" class="activity-item">

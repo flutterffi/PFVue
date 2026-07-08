@@ -2,6 +2,7 @@
 import { computed } from "vue";
 import { useRouter } from "vue-router";
 import AppShell from "@/components/AppShell.vue";
+import SectionHeader from "@/components/SectionHeader.vue";
 import { useSessionStore } from "@/stores/session";
 
 const router = useRouter();
@@ -22,12 +23,11 @@ function goBack() {
     description="Practice a realistic fallback route so the app still feels complete when a URL is invalid."
   >
     <section class="panel not-found-panel">
-      <p class="eyebrow">404 Route</p>
-      <h2>The page you requested does not exist.</h2>
-      <p>
-        This formal workspace now includes a catch-all route, which is a common production detail
-        in Vue Router projects.
-      </p>
+      <SectionHeader
+        eyebrow="404 Route"
+        title="The page you requested does not exist."
+        description="This formal workspace now includes a catch-all route, which is a common production detail in Vue Router projects."
+      />
 
       <div class="editor-actions">
         <button class="primary-button" @click="router.push(homeTarget)">Go To Safe Page</button>

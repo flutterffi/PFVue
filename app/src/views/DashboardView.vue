@@ -6,6 +6,8 @@ import ActivityPanel from "@/components/ActivityPanel.vue";
 import AppShell from "@/components/AppShell.vue";
 import ConfirmDialog from "@/components/ConfirmDialog.vue";
 import { usePreferencesStore } from "@/stores/preferences";
+import SectionHeader from "@/components/SectionHeader.vue";
+import StateNotice from "@/components/StateNotice.vue";
 import SummaryCards from "@/components/SummaryCards.vue";
 import TaskCreateModal from "@/components/TaskCreateModal.vue";
 import TaskEditor from "@/components/TaskEditor.vue";
@@ -133,6 +135,12 @@ function openTaskDetail(id) {
 
     <SummaryCards :summary="summary" />
 
+    <SectionHeader
+      eyebrow="Workspace"
+      title="Active Filters"
+      description="This area behaves like a real admin board with category tabs, sorting, and route-driven detail pages."
+    />
+
     <section class="category-tabs">
       <button
         v-for="tab in categories"
@@ -157,19 +165,20 @@ function openTaskDetail(id) {
       @reset="resetFilters"
     />
 
-    <p v-if="error" class="error-copy">{{ error }}</p>
-    <div v-if="banner.message" class="feedback-banner" :class="banner.type">
-      {{ banner.message }}
-    </div>
+    <StateNotice v-if="error" tone="error" title="Dashboard error" :message="error" />
+    <StateNotice
+      v-if="banner.message"
+      :tone="banner.type"
+      title="Workspace update"
+      :message="banner.message"
+    />
 
-    <section v-if="preferences.showHints" class="hint-panel">
-      <strong>Practice Hint</strong>
-      <p>
-        Try changing the default status filter in Settings, then return here and compare how the
-        dashboard starts with a different working context. You can also switch category tabs to
-        simulate module-level task boards.
-      </p>
-    </section>
+    <StateNotice
+      v-if="preferences.showHints"
+      tone="hint"
+      title="Practice Hint"
+      message="Try changing the default status filter in Settings, then return here and compare how the dashboard starts with a different working context. You can also switch category tabs to simulate module-level task boards."
+    />
 
     <section class="dashboard-secondary-grid">
       <ActivityPanel :items="recentActivity" />

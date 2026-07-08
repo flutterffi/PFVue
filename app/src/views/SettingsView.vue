@@ -2,6 +2,8 @@
 import { reactive, ref } from "vue";
 import { storeToRefs } from "pinia";
 import AppShell from "@/components/AppShell.vue";
+import SectionHeader from "@/components/SectionHeader.vue";
+import StateNotice from "@/components/StateNotice.vue";
 import { usePreferencesStore } from "@/stores/preferences";
 import { useSessionStore } from "@/stores/session";
 
@@ -49,10 +51,13 @@ function resetPreferences() {
     description="Use this page to practice route-level structure and small settings-style forms."
   >
     <section class="panel">
-      <h2>Settings Practice</h2>
-      <p>Adjust app-level preferences here and then return to the dashboard to see the changes.</p>
+      <SectionHeader
+        eyebrow="Preferences"
+        title="Settings Practice"
+        description="Adjust app-level preferences here and then return to the dashboard to see the changes."
+      />
 
-      <p v-if="banner" class="success-copy">{{ banner }}</p>
+      <StateNotice v-if="banner" tone="success" title="Saved change" :message="banner" />
 
       <div class="settings-grid">
         <label>
