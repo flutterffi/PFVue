@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import DashboardView from "@/views/DashboardView.vue";
 import LoginView from "@/views/LoginView.vue";
+import NotFoundView from "@/views/NotFoundView.vue";
 import SettingsView from "@/views/SettingsView.vue";
 import TaskDetailView from "@/views/TaskDetailView.vue";
 import { useSessionStore } from "@/stores/session";
@@ -29,6 +30,11 @@ const routes = [
     name: "task-detail",
     component: TaskDetailView,
     meta: { requiresAuth: true },
+  },
+  {
+    path: "/:pathMatch(.*)*",
+    name: "not-found",
+    component: NotFoundView,
   },
 ];
 

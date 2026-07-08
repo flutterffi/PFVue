@@ -6,6 +6,7 @@
 - added settings-driven defaults for dashboard category and page size
 - added task sorting and a recent activity panel to the formal app workspace
 - added a dedicated task detail route for a more realistic multi-page admin flow
+- added route fallback handling and previous-next task navigation in the detail page
 
 ## v0.6.0
 

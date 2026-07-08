@@ -14,6 +14,27 @@ const { tasks, loading, saving, selectedTask } = storeToRefs(taskStore);
 
 const taskId = computed(() => Number(route.params.id));
 const deleteOpen = ref(false);
+const selectedTaskIndex = computed(() => {
+  if (!selectedTask.value) {
+    return -1;
+  }
+
+  return tasks.value.findIndex((task) => task.id === selectedTask.value.id);
+});
+const previousTask = computed(() => {
+  if (selectedTaskIndex.value <= 0) {
+    return null;
+  }
+
+  return tasks.value[selectedTaskIndex.value - 1] || null;
+});
+const nextTask = computed(() => {
+  if (selectedTaskIndex.value < 0 || selectedTaskIndex.value >= tasks.value.length - 1) {
+    return null;
+  }
+
+  return tasks.value[selectedTaskIndex.value + 1] || null;
+});
 
 async function ensureTaskLoaded() {
   if (tasks.value.length === 0) {
@@ -64,6 +85,11 @@ function requestDelete() {
   }
 
   deleteOpen.value = true;
+}
+
+function openSiblingTask(id) {
+  taskStore.selectTask(id);
+  router.push({ name: "task-detail", params: { id } });
 }
 </script>
 
@@ -120,6 +146,19 @@ function requestDelete() {
           <div class="detail-description">
             <strong>Description</strong>
             <p>{{ selectedTask.description }}</p>
+          </div>
+
+          <div class="detail-neighbors">
+            <button
+              class="ghost-button"
+              :disabled="!previousTask"
+              @click="previousTask && openSiblingTask(previousTask.id)"
+            >
+              {{ previousTask ? `Previous: ${previousTask.title}` : "No Previous Task" }}
+            </button>
+            <button class="ghost-button" :disabled="!nextTask" @click="nextTask && openSiblingTask(nextTask.id)">
+              {{ nextTask ? `Next: ${nextTask.title}` : "No Next Task" }}
+            </button>
           </div>
         </template>
 
