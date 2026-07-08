@@ -183,7 +183,7 @@ textarea {
 
 .toolbar-main {
   display: grid;
-  grid-template-columns: 1.2fr 220px 220px auto;
+  grid-template-columns: 1.2fr 180px 180px 160px auto;
   gap: 12px;
 }
 

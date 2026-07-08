@@ -3,6 +3,7 @@
 ## Unreleased
 
 - added task category grouping and dashboard category tabs
+- added settings-driven defaults for dashboard category and page size
 
 ## v0.6.0
 

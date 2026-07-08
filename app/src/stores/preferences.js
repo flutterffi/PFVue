@@ -7,6 +7,8 @@ const defaultPreferences = {
   displayName: "",
   studyTrack: "Vue 3 Project Practice",
   defaultStatusFilter: "all",
+  defaultCategory: "all",
+  pageSize: 3,
   compactList: false,
   showHints: true,
 };

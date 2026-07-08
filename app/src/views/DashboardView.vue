@@ -17,6 +17,7 @@ const sessionStore = useSessionStore();
 const preferencesStore = usePreferencesStore();
 const taskStore = useTaskStore();
 const { tasks, loading, error, saving, selectedTask, summary } = storeToRefs(taskStore);
+const { preferences, displayName } = storeToRefs(preferencesStore);
 const {
   keyword,
   status,
@@ -25,13 +26,14 @@ const {
   pagedTasks,
   totalResults,
   currentPage,
+  pageSize,
   totalPages,
   pageRange,
   goToPreviousPage,
   goToNextPage,
+  setPageSize,
   resetFilters,
-} = useTaskFilters(tasks);
-const { preferences, displayName } = storeToRefs(preferencesStore);
+} = useTaskFilters(tasks, preferences.value.pageSize);
 const banner = ref({
   type: "",
   message: "",
@@ -41,6 +43,8 @@ const deleteTargetId = ref(null);
 
 onMounted(() => {
   status.value = preferences.value.defaultStatusFilter;
+  category.value = preferences.value.defaultCategory;
+  setPageSize(preferences.value.pageSize);
   taskStore.fetchTasks();
 });
 
@@ -139,6 +143,7 @@ function showBanner(type, message) {
       :categories="categories"
       :total-results="totalResults"
       :page-range="pageRange"
+      :page-size="pageSize"
       @reset="resetFilters"
     />
 

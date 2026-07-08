@@ -1,11 +1,11 @@
 import { computed, ref, watch } from "vue";
 
-export function useTaskFilters(tasks) {
+export function useTaskFilters(tasks, initialPageSize = 3) {
   const keyword = ref("");
   const status = ref("all");
   const category = ref("all");
   const currentPage = ref(1);
-  const pageSize = ref(3);
+  const pageSize = ref(initialPageSize);
 
   const categories = computed(() => {
     return ["all", ...new Set(tasks.value.map((task) => task.category).filter(Boolean))];
@@ -75,6 +75,10 @@ export function useTaskFilters(tasks) {
     currentPage.value = 1;
   }
 
+  function setPageSize(value) {
+    pageSize.value = value;
+  }
+
   return {
     keyword,
     status,
@@ -84,10 +88,12 @@ export function useTaskFilters(tasks) {
     pagedTasks,
     totalResults,
     currentPage,
+    pageSize,
     totalPages,
     pageRange,
     goToPreviousPage,
     goToNextPage,
+    setPageSize,
     resetFilters,
   };
 }

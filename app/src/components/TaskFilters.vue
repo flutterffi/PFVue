@@ -24,9 +24,13 @@ defineProps({
     type: Object,
     required: true,
   },
+  pageSize: {
+    type: Number,
+    required: true,
+  },
 });
 
-const emit = defineEmits(["update:keyword", "update:status", "update:category", "reset"]);
+const emit = defineEmits(["update:keyword", "update:status", "update:category", "update:pageSize", "reset"]);
 </script>
 
 <template>
@@ -50,6 +54,12 @@ const emit = defineEmits(["update:keyword", "update:status", "update:category", 
         <option v-for="item in categories" :key="item" :value="item">
           {{ item }}
         </option>
+      </select>
+
+      <select :value="pageSize" @change="emit('update:pageSize', Number($event.target.value))">
+        <option :value="3">3 per page</option>
+        <option :value="5">5 per page</option>
+        <option :value="8">8 per page</option>
       </select>
 
       <button class="ghost-button" @click="emit('reset')">Reset</button>

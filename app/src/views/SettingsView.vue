@@ -14,6 +14,8 @@ const form = reactive({
   displayName: preferences.value.displayName,
   studyTrack: preferences.value.studyTrack,
   defaultStatusFilter: preferences.value.defaultStatusFilter,
+  defaultCategory: preferences.value.defaultCategory,
+  pageSize: preferences.value.pageSize,
   compactList: preferences.value.compactList,
   showHints: preferences.value.showHints,
 });
@@ -33,6 +35,8 @@ function resetPreferences() {
   form.displayName = preferences.value.displayName;
   form.studyTrack = preferences.value.studyTrack;
   form.defaultStatusFilter = preferences.value.defaultStatusFilter;
+  form.defaultCategory = preferences.value.defaultCategory;
+  form.pageSize = preferences.value.pageSize;
   form.compactList = preferences.value.compactList;
   form.showHints = preferences.value.showHints;
   banner.value = "Preferences reset.";
@@ -72,6 +76,26 @@ function resetPreferences() {
             <option value="todo">Todo</option>
             <option value="in-progress">In progress</option>
             <option value="done">Done</option>
+          </select>
+        </label>
+
+        <label>
+          Default Dashboard Category
+          <select v-model="form.defaultCategory">
+            <option value="all">All categories</option>
+            <option value="Workflow">Workflow</option>
+            <option value="UI">UI</option>
+            <option value="State">State</option>
+            <option value="Architecture">Architecture</option>
+          </select>
+        </label>
+
+        <label>
+          Tasks Per Page
+          <select v-model="form.pageSize">
+            <option :value="3">3</option>
+            <option :value="5">5</option>
+            <option :value="8">8</option>
           </select>
         </label>
 
