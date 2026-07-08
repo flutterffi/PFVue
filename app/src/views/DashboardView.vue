@@ -1,5 +1,6 @@
 <script setup>
 import { onMounted, ref } from "vue";
+import { useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
 import ActivityPanel from "@/components/ActivityPanel.vue";
 import AppShell from "@/components/AppShell.vue";
@@ -17,6 +18,7 @@ import { useTaskStore } from "@/stores/tasks";
 const sessionStore = useSessionStore();
 const preferencesStore = usePreferencesStore();
 const taskStore = useTaskStore();
+const router = useRouter();
 const { tasks, loading, error, saving, selectedTask, summary, recentActivity } = storeToRefs(taskStore);
 const { preferences, displayName } = storeToRefs(preferencesStore);
 const {
@@ -105,6 +107,11 @@ function showBanner(type, message) {
     }
   }, 2400);
 }
+
+function openTaskDetail(id) {
+  taskStore.selectTask(id);
+  router.push({ name: "task-detail", params: { id } });
+}
 </script>
 
 <template>
@@ -177,6 +184,7 @@ function showBanner(type, message) {
         :current-page="currentPage"
         :total-pages="totalPages"
         @select="taskStore.selectTask"
+        @open-detail="openTaskDetail"
         @quick-status="handleQuickStatus"
         @delete="requestDelete"
         @previous-page="goToPreviousPage"

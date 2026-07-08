@@ -203,6 +203,12 @@ textarea {
   margin-bottom: 18px;
 }
 
+.detail-route-grid {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 18px;
+}
+
 .panel {
   padding: 18px;
 }
@@ -233,6 +239,32 @@ textarea {
   color: var(--muted);
   font-size: 13px;
   white-space: nowrap;
+}
+
+.detail-facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.detail-fact {
+  padding: 14px;
+  border-radius: 16px;
+  background: #f7f9fd;
+  border: 1px solid #e3eaf5;
+}
+
+.detail-fact strong {
+  display: block;
+  margin-bottom: 6px;
+}
+
+.detail-description {
+  padding: 14px;
+  border-radius: 16px;
+  background: #fbfcfe;
+  border: 1px solid #e7edf7;
 }
 
 .pagination-bar {
@@ -452,7 +484,8 @@ label {
 
 @media (max-width: 980px) {
   .summary-grid,
-  .workspace-grid {
+  .workspace-grid,
+  .detail-route-grid {
     grid-template-columns: 1fr;
   }
 

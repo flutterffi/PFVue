@@ -28,7 +28,7 @@ defineProps({
   },
 });
 
-const emit = defineEmits(["select", "quick-status", "delete", "previous-page", "next-page"]);
+const emit = defineEmits(["select", "open-detail", "quick-status", "delete", "previous-page", "next-page"]);
 </script>
 
 <template>
@@ -62,6 +62,7 @@ const emit = defineEmits(["select", "quick-status", "delete", "previous-page", "
 
         <div class="card-actions">
           <button class="secondary-button" @click="emit('select', task.id)">Open</button>
+          <button class="ghost-button" @click="emit('open-detail', task.id)">Detail Page</button>
           <button class="ghost-button" @click="emit('quick-status', task.id)">Next Status</button>
           <button class="ghost-button danger-button" @click="emit('delete', task.id)">Delete</button>
         </div>

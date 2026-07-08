@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import DashboardView from "@/views/DashboardView.vue";
 import LoginView from "@/views/LoginView.vue";
 import SettingsView from "@/views/SettingsView.vue";
+import TaskDetailView from "@/views/TaskDetailView.vue";
 import { useSessionStore } from "@/stores/session";
 
 const routes = [
@@ -21,6 +22,12 @@ const routes = [
     path: "/settings",
     name: "settings",
     component: SettingsView,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/tasks/:id",
+    name: "task-detail",
+    component: TaskDetailView,
     meta: { requiresAuth: true },
   },
 ];
