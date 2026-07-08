@@ -19,7 +19,18 @@ export const useTaskStore = defineStore("tasks", () => {
       todo: tasks.value.filter((task) => task.status === "todo").length,
       inProgress: tasks.value.filter((task) => task.status === "in-progress").length,
       done: tasks.value.filter((task) => task.status === "done").length,
+      highPriority: tasks.value.filter((task) => task.priority === "high").length,
     };
+  });
+
+  const recentActivity = computed(() => {
+    return [...tasks.value]
+      .sort((left, right) => {
+        const leftTime = new Date(left.updatedAt || left.createdAt || 0).getTime();
+        const rightTime = new Date(right.updatedAt || right.createdAt || 0).getTime();
+        return rightTime - leftTime;
+      })
+      .slice(0, 4);
   });
 
   async function fetchTasks() {
@@ -112,6 +123,7 @@ export const useTaskStore = defineStore("tasks", () => {
     saving,
     selectedTask,
     summary,
+    recentActivity,
     fetchTasks,
     addTask,
     saveTask,

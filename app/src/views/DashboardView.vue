@@ -1,6 +1,7 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import { storeToRefs } from "pinia";
+import ActivityPanel from "@/components/ActivityPanel.vue";
 import AppShell from "@/components/AppShell.vue";
 import ConfirmDialog from "@/components/ConfirmDialog.vue";
 import { usePreferencesStore } from "@/stores/preferences";
@@ -16,13 +17,14 @@ import { useTaskStore } from "@/stores/tasks";
 const sessionStore = useSessionStore();
 const preferencesStore = usePreferencesStore();
 const taskStore = useTaskStore();
-const { tasks, loading, error, saving, selectedTask, summary } = storeToRefs(taskStore);
+const { tasks, loading, error, saving, selectedTask, summary, recentActivity } = storeToRefs(taskStore);
 const { preferences, displayName } = storeToRefs(preferencesStore);
 const {
   keyword,
   status,
   category,
   categories,
+  sortBy,
   pagedTasks,
   totalResults,
   currentPage,
@@ -141,6 +143,7 @@ function showBanner(type, message) {
       v-model:status="status"
       v-model:category="category"
       :categories="categories"
+      v-model:sort-by="sortBy"
       :total-results="totalResults"
       :page-range="pageRange"
       :page-size="pageSize"
@@ -159,6 +162,10 @@ function showBanner(type, message) {
         dashboard starts with a different working context. You can also switch category tabs to
         simulate module-level task boards.
       </p>
+    </section>
+
+    <section class="dashboard-secondary-grid">
+      <ActivityPanel :items="recentActivity" />
     </section>
 
     <section class="workspace-grid">

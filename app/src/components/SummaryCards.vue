@@ -11,6 +11,7 @@ const cards = [
   { key: "todo", label: "Todo" },
   { key: "inProgress", label: "In Progress" },
   { key: "done", label: "Done" },
+  { key: "highPriority", label: "High Priority" },
 ];
 </script>
 

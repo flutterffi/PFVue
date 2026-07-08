@@ -4,6 +4,7 @@
 
 - added task category grouping and dashboard category tabs
 - added settings-driven defaults for dashboard category and page size
+- added task sorting and a recent activity panel to the formal app workspace
 
 ## v0.6.0
 

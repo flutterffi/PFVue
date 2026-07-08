@@ -16,6 +16,10 @@ defineProps({
     type: Array,
     required: true,
   },
+  sortBy: {
+    type: String,
+    required: true,
+  },
   totalResults: {
     type: Number,
     required: true,
@@ -30,7 +34,7 @@ defineProps({
   },
 });
 
-const emit = defineEmits(["update:keyword", "update:status", "update:category", "update:pageSize", "reset"]);
+const emit = defineEmits(["update:keyword", "update:status", "update:category", "update:sortBy", "update:pageSize", "reset"]);
 </script>
 
 <template>
@@ -60,6 +64,12 @@ const emit = defineEmits(["update:keyword", "update:status", "update:category", 
         <option :value="3">3 per page</option>
         <option :value="5">5 per page</option>
         <option :value="8">8 per page</option>
+      </select>
+
+      <select :value="sortBy" @change="emit('update:sortBy', $event.target.value)">
+        <option value="updated-desc">Latest updated</option>
+        <option value="priority">Priority</option>
+        <option value="title">Title</option>
       </select>
 
       <button class="ghost-button" @click="emit('reset')">Reset</button>

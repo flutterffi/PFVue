@@ -4,6 +4,7 @@ export function useTaskFilters(tasks, initialPageSize = 3) {
   const keyword = ref("");
   const status = ref("all");
   const category = ref("all");
+  const sortBy = ref("updated-desc");
   const currentPage = ref(1);
   const pageSize = ref(initialPageSize);
 
@@ -12,12 +13,31 @@ export function useTaskFilters(tasks, initialPageSize = 3) {
   });
 
   const filteredTasks = computed(() => {
-    return tasks.value.filter((task) => {
+    const matchingTasks = tasks.value.filter((task) => {
       const matchesKeyword = task.title.toLowerCase().includes(keyword.value.trim().toLowerCase());
       const matchesStatus = status.value === "all" || task.status === status.value;
       const matchesCategory = category.value === "all" || task.category === category.value;
       return matchesKeyword && matchesStatus && matchesCategory;
     });
+
+    const sortedTasks = [...matchingTasks];
+
+    sortedTasks.sort((left, right) => {
+      if (sortBy.value === "priority") {
+        const priorityOrder = { high: 0, medium: 1, low: 2 };
+        return priorityOrder[left.priority] - priorityOrder[right.priority];
+      }
+
+      if (sortBy.value === "title") {
+        return left.title.localeCompare(right.title);
+      }
+
+      const leftTime = new Date(left.updatedAt || left.createdAt || 0).getTime();
+      const rightTime = new Date(right.updatedAt || right.createdAt || 0).getTime();
+      return rightTime - leftTime;
+    });
+
+    return sortedTasks;
   });
 
   const totalResults = computed(() => filteredTasks.value.length);
@@ -46,7 +66,7 @@ export function useTaskFilters(tasks, initialPageSize = 3) {
     return { start, end };
   });
 
-  watch([keyword, status, category, totalResults], () => {
+  watch([keyword, status, category, sortBy, totalResults], () => {
     currentPage.value = 1;
   });
 
@@ -72,6 +92,7 @@ export function useTaskFilters(tasks, initialPageSize = 3) {
     keyword.value = "";
     status.value = "all";
     category.value = "all";
+    sortBy.value = "updated-desc";
     currentPage.value = 1;
   }
 
@@ -83,6 +104,7 @@ export function useTaskFilters(tasks, initialPageSize = 3) {
     keyword,
     status,
     category,
+    sortBy,
     categories,
     filteredTasks,
     pagedTasks,
