@@ -14,6 +14,10 @@ defineProps({
     type: Boolean,
     default: false,
   },
+  compact: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const emit = defineEmits(["select", "quick-status", "delete"]);
@@ -32,7 +36,7 @@ const emit = defineEmits(["select", "quick-status", "delete"]);
         v-for="task in tasks"
         :key="task.id"
         class="task-card"
-        :class="{ selected: selectedTaskId === task.id }"
+        :class="{ selected: selectedTaskId === task.id, compact }"
       >
         <div class="task-card-top">
           <div>

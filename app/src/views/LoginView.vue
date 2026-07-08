@@ -1,15 +1,23 @@
 <script setup>
-import { reactive, ref } from "vue";
+import { onMounted, reactive, ref } from "vue";
 import { useRouter } from "vue-router";
+import { usePreferencesStore } from "@/stores/preferences";
 import { useSessionStore } from "@/stores/session";
 
 const sessionStore = useSessionStore();
+const preferencesStore = usePreferencesStore();
 const router = useRouter();
 const error = ref("");
 
 const form = reactive({
   name: "",
   email: "",
+});
+
+onMounted(() => {
+  if (preferencesStore.displayName) {
+    form.name = preferencesStore.displayName;
+  }
 });
 
 function handleLogin() {
@@ -42,6 +50,10 @@ function handleLogin() {
           <input v-model="form.email" type="email" placeholder="learner@example.com" />
         </label>
       </div>
+
+      <p v-if="preferencesStore.displayName" class="hint-copy">
+        Saved preference found for display name: {{ preferencesStore.displayName }}
+      </p>
 
       <button class="primary-button" @click="handleLogin">Enter App</button>
       <p v-if="error" class="error-copy">{{ error }}</p>

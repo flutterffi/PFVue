@@ -2,6 +2,7 @@
 import { onMounted, ref } from "vue";
 import { storeToRefs } from "pinia";
 import AppShell from "@/components/AppShell.vue";
+import { usePreferencesStore } from "@/stores/preferences";
 import SummaryCards from "@/components/SummaryCards.vue";
 import TaskEditor from "@/components/TaskEditor.vue";
 import TaskFilters from "@/components/TaskFilters.vue";
@@ -11,15 +12,18 @@ import { useSessionStore } from "@/stores/session";
 import { useTaskStore } from "@/stores/tasks";
 
 const sessionStore = useSessionStore();
+const preferencesStore = usePreferencesStore();
 const taskStore = useTaskStore();
 const { tasks, loading, error, saving, selectedTask, summary } = storeToRefs(taskStore);
 const { keyword, status, filteredTasks, resetFilters } = useTaskFilters(tasks);
+const { preferences, displayName } = storeToRefs(preferencesStore);
 const banner = ref({
   type: "",
   message: "",
 });
 
 onMounted(() => {
+  status.value = preferences.value.defaultStatusFilter;
   taskStore.fetchTasks();
 });
 
@@ -77,7 +81,7 @@ function showBanner(type, message) {
   >
     <div class="topbar">
       <div>
-        <h2>Welcome, {{ sessionStore.user?.name || "Learner" }}</h2>
+        <h2>Welcome, {{ displayName || sessionStore.user?.name || "Learner" }}</h2>
         <p>Practice a production-style list, filter, and edit workflow.</p>
       </div>
 
@@ -97,11 +101,20 @@ function showBanner(type, message) {
       {{ banner.message }}
     </div>
 
+    <section v-if="preferences.showHints" class="hint-panel">
+      <strong>Practice Hint</strong>
+      <p>
+        Try changing the default status filter in Settings, then return here and compare how the
+        dashboard starts with a different working context.
+      </p>
+    </section>
+
     <section class="workspace-grid">
       <TaskList
         :tasks="filteredTasks"
         :selected-task-id="selectedTask?.id ?? null"
         :loading="loading"
+        :compact="preferences.compactList"
         @select="taskStore.selectTask"
         @quick-status="handleQuickStatus"
         @delete="handleDelete"
