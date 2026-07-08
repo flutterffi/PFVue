@@ -2,8 +2,10 @@
 import { onMounted, ref } from "vue";
 import { storeToRefs } from "pinia";
 import AppShell from "@/components/AppShell.vue";
+import ConfirmDialog from "@/components/ConfirmDialog.vue";
 import { usePreferencesStore } from "@/stores/preferences";
 import SummaryCards from "@/components/SummaryCards.vue";
+import TaskCreateModal from "@/components/TaskCreateModal.vue";
 import TaskEditor from "@/components/TaskEditor.vue";
 import TaskFilters from "@/components/TaskFilters.vue";
 import TaskList from "@/components/TaskList.vue";
@@ -15,12 +17,25 @@ const sessionStore = useSessionStore();
 const preferencesStore = usePreferencesStore();
 const taskStore = useTaskStore();
 const { tasks, loading, error, saving, selectedTask, summary } = storeToRefs(taskStore);
-const { keyword, status, filteredTasks, resetFilters } = useTaskFilters(tasks);
+const {
+  keyword,
+  status,
+  pagedTasks,
+  totalResults,
+  currentPage,
+  totalPages,
+  pageRange,
+  goToPreviousPage,
+  goToNextPage,
+  resetFilters,
+} = useTaskFilters(tasks);
 const { preferences, displayName } = storeToRefs(preferencesStore);
 const banner = ref({
   type: "",
   message: "",
 });
+const createModalOpen = ref(false);
+const deleteTargetId = ref(null);
 
 onMounted(() => {
   status.value = preferences.value.defaultStatusFilter;
@@ -39,15 +54,25 @@ async function handleSave({ id, payload }) {
 async function handleCreate(payload) {
   try {
     await taskStore.addTask(payload);
+    createModalOpen.value = false;
     showBanner("success", "Starter task created.");
   } catch (createError) {
     showBanner("error", createError.message);
   }
 }
 
-async function handleDelete(id) {
+function requestDelete(id) {
+  deleteTargetId.value = id;
+}
+
+async function confirmDelete() {
+  if (!deleteTargetId.value) {
+    return;
+  }
+
   try {
-    await taskStore.removeTaskById(id);
+    await taskStore.removeTaskById(deleteTargetId.value);
+    deleteTargetId.value = null;
     showBanner("success", "Task deleted.");
   } catch (deleteError) {
     showBanner("error", deleteError.message);
@@ -85,7 +110,10 @@ function showBanner(type, message) {
         <p>Practice a production-style list, filter, and edit workflow.</p>
       </div>
 
-      <button class="ghost-button" @click="sessionStore.signOut()">Sign Out</button>
+      <div class="topbar-actions">
+        <button class="primary-button" @click="createModalOpen = true">New Task</button>
+        <button class="ghost-button" @click="sessionStore.signOut()">Sign Out</button>
+      </div>
     </div>
 
     <SummaryCards :summary="summary" />
@@ -93,6 +121,8 @@ function showBanner(type, message) {
     <TaskFilters
       v-model:keyword="keyword"
       v-model:status="status"
+      :total-results="totalResults"
+      :page-range="pageRange"
       @reset="resetFilters"
     />
 
@@ -111,13 +141,17 @@ function showBanner(type, message) {
 
     <section class="workspace-grid">
       <TaskList
-        :tasks="filteredTasks"
+        :tasks="pagedTasks"
         :selected-task-id="selectedTask?.id ?? null"
         :loading="loading"
         :compact="preferences.compactList"
+        :current-page="currentPage"
+        :total-pages="totalPages"
         @select="taskStore.selectTask"
         @quick-status="handleQuickStatus"
-        @delete="handleDelete"
+        @delete="requestDelete"
+        @previous-page="goToPreviousPage"
+        @next-page="goToNextPage"
       />
 
       <TaskEditor
@@ -125,8 +159,25 @@ function showBanner(type, message) {
         :saving="saving"
         @save="handleSave"
         @create="handleCreate"
-        @delete="handleDelete"
+        @open-create="createModalOpen = true"
+        @delete="requestDelete"
       />
     </section>
+
+    <TaskCreateModal
+      :open="createModalOpen"
+      :saving="saving"
+      @close="createModalOpen = false"
+      @create="handleCreate"
+    />
+
+    <ConfirmDialog
+      :open="Boolean(deleteTargetId)"
+      title="Delete task?"
+      message="This removes the task from the local mock data store for this app workspace."
+      :loading="saving"
+      @cancel="deleteTargetId = null"
+      @confirm="confirmDelete"
+    />
   </AppShell>
 </template>

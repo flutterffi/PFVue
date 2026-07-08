@@ -18,9 +18,17 @@ defineProps({
     type: Boolean,
     default: false,
   },
+  currentPage: {
+    type: Number,
+    default: 1,
+  },
+  totalPages: {
+    type: Number,
+    default: 1,
+  },
 });
 
-const emit = defineEmits(["select", "quick-status", "delete"]);
+const emit = defineEmits(["select", "quick-status", "delete", "previous-page", "next-page"]);
 </script>
 
 <template>
@@ -57,6 +65,16 @@ const emit = defineEmits(["select", "quick-status", "delete"]);
           <button class="ghost-button danger-button" @click="emit('delete', task.id)">Delete</button>
         </div>
       </article>
+
+      <div v-if="totalPages > 1" class="pagination-bar">
+        <button class="ghost-button" :disabled="currentPage === 1" @click="emit('previous-page')">
+          Previous
+        </button>
+        <span class="pagination-copy">Page {{ currentPage }} of {{ totalPages }}</span>
+        <button class="ghost-button" :disabled="currentPage === totalPages" @click="emit('next-page')">
+          Next
+        </button>
+      </div>
     </div>
   </section>
 </template>

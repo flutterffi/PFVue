@@ -12,7 +12,7 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(["save", "create", "delete"]);
+const emit = defineEmits(["save", "open-create", "delete"]);
 
 const form = reactive({
   title: "",
@@ -83,15 +83,6 @@ function submitUpdate() {
   });
 }
 
-function submitCreate() {
-  emit("create", {
-    title: "New formal app task",
-    status: "todo",
-    priority: "medium",
-    assignee: "Learner",
-    description: "Replace this placeholder with your own workflow task.",
-  });
-}
 </script>
 
 <template>
@@ -149,8 +140,8 @@ function submitCreate() {
     <template v-else>
       <h2>No Task Selected</h2>
       <p>Select a task from the list, or create a fresh one to practice the workflow.</p>
-      <button class="primary-button" :disabled="saving" @click="submitCreate">
-        {{ saving ? "Creating..." : "Create Starter Task" }}
+      <button class="primary-button" :disabled="saving" @click="emit('open-create')">
+        {{ saving ? "Creating..." : "Open Create Task" }}
       </button>
     </template>
   </aside>

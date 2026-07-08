@@ -6,6 +6,7 @@
 - added validation and stronger editor interactions in the Vite + Vue 3 app workspace
 - added persisted application preferences and a more realistic multi-page settings flow
 - connected preferences and session behavior for a smoother multi-page learning experience
+- added task creation modal and delete confirmation flow to the formal app workspace
 
 ## v0.5.0
 
