@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## v0.6.0
 
 - improved the formal app workflow with task deletion, quick status transitions, and save feedback
 - added validation and stronger editor interactions in the Vite + Vue 3 app workspace
