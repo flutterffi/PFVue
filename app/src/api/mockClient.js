@@ -4,6 +4,7 @@ const seedTasks = [
   {
     id: 1,
     title: "Review the router flow",
+    category: "Architecture",
     status: "todo",
     priority: "high",
     assignee: "Plato",
@@ -12,6 +13,7 @@ const seedTasks = [
   {
     id: 2,
     title: "Inspect the Pinia store",
+    category: "State",
     status: "in-progress",
     priority: "medium",
     assignee: "Learner",
@@ -20,6 +22,7 @@ const seedTasks = [
   {
     id: 3,
     title: "Extend the dashboard UI",
+    category: "UI",
     status: "done",
     priority: "low",
     assignee: "Plato",
@@ -59,6 +62,7 @@ export async function insertTask(payload) {
   const newTask = {
     id: Date.now(),
     title: payload.title,
+    category: payload.category,
     status: payload.status,
     priority: payload.priority,
     assignee: payload.assignee,

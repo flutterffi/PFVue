@@ -55,6 +55,7 @@ const emit = defineEmits(["select", "quick-status", "delete", "previous-page", "
         </div>
 
         <div class="meta-row">
+          <span class="meta-pill strong-pill">{{ task.category }}</span>
           <span class="meta-pill">{{ task.priority }}</span>
           <span class="meta-pill">{{ task.assignee }}</span>
         </div>

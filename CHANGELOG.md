@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- added task category grouping and dashboard category tabs
+
 ## v0.6.0
 
 - improved the formal app workflow with task deletion, quick status transitions, and save feedback

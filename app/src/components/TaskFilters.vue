@@ -8,6 +8,14 @@ defineProps({
     type: String,
     required: true,
   },
+  category: {
+    type: String,
+    required: true,
+  },
+  categories: {
+    type: Array,
+    required: true,
+  },
   totalResults: {
     type: Number,
     required: true,
@@ -18,7 +26,7 @@ defineProps({
   },
 });
 
-const emit = defineEmits(["update:keyword", "update:status", "reset"]);
+const emit = defineEmits(["update:keyword", "update:status", "update:category", "reset"]);
 </script>
 
 <template>
@@ -36,6 +44,12 @@ const emit = defineEmits(["update:keyword", "update:status", "reset"]);
         <option value="todo">Todo</option>
         <option value="in-progress">In progress</option>
         <option value="done">Done</option>
+      </select>
+
+      <select :value="category" @change="emit('update:category', $event.target.value)">
+        <option v-for="item in categories" :key="item" :value="item">
+          {{ item }}
+        </option>
       </select>
 
       <button class="ghost-button" @click="emit('reset')">Reset</button>

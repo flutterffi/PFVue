@@ -16,6 +16,7 @@ const emit = defineEmits(["close", "create"]);
 
 const form = reactive({
   title: "",
+  category: "Workflow",
   status: "todo",
   priority: "medium",
   assignee: "",
@@ -29,6 +30,7 @@ const errors = reactive({
 
 function resetForm() {
   form.title = "";
+  form.category = "Workflow";
   form.status = "todo";
   form.priority = "medium";
   form.assignee = "";
@@ -60,6 +62,7 @@ function submitCreate() {
 
   emit("create", {
     title: form.title.trim(),
+    category: form.category,
     status: form.status,
     priority: form.priority,
     assignee: form.assignee.trim(),
@@ -86,6 +89,16 @@ function submitCreate() {
           Title
           <input v-model="form.title" type="text" placeholder="Example: Add pagination" />
           <small v-if="errors.title" class="field-error">{{ errors.title }}</small>
+        </label>
+
+        <label>
+          Category
+          <select v-model="form.category">
+            <option value="Workflow">Workflow</option>
+            <option value="UI">UI</option>
+            <option value="State">State</option>
+            <option value="Architecture">Architecture</option>
+          </select>
         </label>
 
         <label>

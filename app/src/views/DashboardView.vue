@@ -20,6 +20,8 @@ const { tasks, loading, error, saving, selectedTask, summary } = storeToRefs(tas
 const {
   keyword,
   status,
+  category,
+  categories,
   pagedTasks,
   totalResults,
   currentPage,
@@ -118,9 +120,23 @@ function showBanner(type, message) {
 
     <SummaryCards :summary="summary" />
 
+    <section class="category-tabs">
+      <button
+        v-for="tab in categories"
+        :key="tab"
+        class="ghost-button"
+        :class="{ activeTab: category === tab }"
+        @click="category = tab"
+      >
+        {{ tab }}
+      </button>
+    </section>
+
     <TaskFilters
       v-model:keyword="keyword"
       v-model:status="status"
+      v-model:category="category"
+      :categories="categories"
       :total-results="totalResults"
       :page-range="pageRange"
       @reset="resetFilters"
@@ -135,7 +151,8 @@ function showBanner(type, message) {
       <strong>Practice Hint</strong>
       <p>
         Try changing the default status filter in Settings, then return here and compare how the
-        dashboard starts with a different working context.
+        dashboard starts with a different working context. You can also switch category tabs to
+        simulate module-level task boards.
       </p>
     </section>
 

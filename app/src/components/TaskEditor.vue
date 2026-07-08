@@ -16,6 +16,7 @@ const emit = defineEmits(["save", "open-create", "delete"]);
 
 const form = reactive({
   title: "",
+  category: "Workflow",
   status: "todo",
   priority: "medium",
   assignee: "",
@@ -35,6 +36,7 @@ watch(
 
     if (!task) {
       form.title = "";
+      form.category = "Workflow";
       form.status = "todo";
       form.priority = "medium";
       form.assignee = "";
@@ -43,6 +45,7 @@ watch(
     }
 
     form.title = task.title;
+    form.category = task.category || "Workflow";
     form.status = task.status;
     form.priority = task.priority;
     form.assignee = task.assignee;
@@ -75,6 +78,7 @@ function submitUpdate() {
     id: props.task.id,
     payload: {
       title: form.title.trim(),
+      category: form.category,
       status: form.status,
       priority: form.priority,
       assignee: form.assignee.trim(),
@@ -95,6 +99,16 @@ function submitUpdate() {
           Title
           <input v-model="form.title" type="text" />
           <small v-if="errors.title" class="field-error">{{ errors.title }}</small>
+        </label>
+
+        <label>
+          Category
+          <select v-model="form.category">
+            <option value="Workflow">Workflow</option>
+            <option value="UI">UI</option>
+            <option value="State">State</option>
+            <option value="Architecture">Architecture</option>
+          </select>
         </label>
 
         <label>

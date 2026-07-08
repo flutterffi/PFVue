@@ -3,14 +3,20 @@ import { computed, ref, watch } from "vue";
 export function useTaskFilters(tasks) {
   const keyword = ref("");
   const status = ref("all");
+  const category = ref("all");
   const currentPage = ref(1);
   const pageSize = ref(3);
+
+  const categories = computed(() => {
+    return ["all", ...new Set(tasks.value.map((task) => task.category).filter(Boolean))];
+  });
 
   const filteredTasks = computed(() => {
     return tasks.value.filter((task) => {
       const matchesKeyword = task.title.toLowerCase().includes(keyword.value.trim().toLowerCase());
       const matchesStatus = status.value === "all" || task.status === status.value;
-      return matchesKeyword && matchesStatus;
+      const matchesCategory = category.value === "all" || task.category === category.value;
+      return matchesKeyword && matchesStatus && matchesCategory;
     });
   });
 
@@ -40,7 +46,7 @@ export function useTaskFilters(tasks) {
     return { start, end };
   });
 
-  watch([keyword, status, totalResults], () => {
+  watch([keyword, status, category, totalResults], () => {
     currentPage.value = 1;
   });
 
@@ -65,12 +71,15 @@ export function useTaskFilters(tasks) {
   function resetFilters() {
     keyword.value = "";
     status.value = "all";
+    category.value = "all";
     currentPage.value = 1;
   }
 
   return {
     keyword,
     status,
+    category,
+    categories,
     filteredTasks,
     pagedTasks,
     totalResults,
