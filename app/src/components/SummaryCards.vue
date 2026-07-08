@@ -1,8 +1,14 @@
 <script setup>
+import LoadingSkeleton from "@/components/LoadingSkeleton.vue";
+
 defineProps({
   summary: {
     type: Object,
     required: true,
+  },
+  loading: {
+    type: Boolean,
+    default: false,
   },
 });
 
@@ -19,7 +25,8 @@ const cards = [
   <section class="summary-grid">
     <article v-for="card in cards" :key="card.key" class="summary-card">
       <small>{{ card.label }}</small>
-      <strong>{{ summary[card.key] }}</strong>
+      <LoadingSkeleton v-if="loading" :blocks="1" compact />
+      <strong v-else>{{ summary[card.key] }}</strong>
     </article>
   </section>
 </template>

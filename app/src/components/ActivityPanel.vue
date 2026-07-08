@@ -1,11 +1,16 @@
 <script setup>
 import SectionHeader from "@/components/SectionHeader.vue";
+import LoadingSkeleton from "@/components/LoadingSkeleton.vue";
 import StateNotice from "@/components/StateNotice.vue";
 
 defineProps({
   items: {
     type: Array,
     required: true,
+  },
+  loading: {
+    type: Boolean,
+    default: false,
   },
 });
 
@@ -31,8 +36,10 @@ function formatDate(value) {
       description="A compact feed helps practice small dashboard modules and lightweight data summaries."
     />
 
+    <LoadingSkeleton v-if="loading" :blocks="4" />
+
     <StateNotice
-      v-if="items.length === 0"
+      v-else-if="items.length === 0"
       title="No activity yet"
       message="Recent updates will appear here after tasks are created or edited."
     />

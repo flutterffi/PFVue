@@ -1,4 +1,5 @@
 <script setup>
+import LoadingSkeleton from "@/components/LoadingSkeleton.vue";
 import SectionHeader from "@/components/SectionHeader.vue";
 import StateNotice from "@/components/StateNotice.vue";
 import StatusBadge from "@/components/StatusBadge.vue";
@@ -41,7 +42,7 @@ const emit = defineEmits(["select", "open-detail", "quick-status", "delete", "pr
       description="Use the list to practice selection, routing, quick actions, and pagination."
     />
 
-    <StateNotice v-if="loading" title="Loading tasks" message="The mock API is preparing the current task set." />
+    <LoadingSkeleton v-if="loading" :blocks="4" />
 
     <StateNotice
       v-else-if="tasks.length === 0"

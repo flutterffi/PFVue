@@ -4,6 +4,9 @@ import { useRoute, useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
 import AppShell from "@/components/AppShell.vue";
 import ConfirmDialog from "@/components/ConfirmDialog.vue";
+import LoadingSkeleton from "@/components/LoadingSkeleton.vue";
+import SectionHeader from "@/components/SectionHeader.vue";
+import StateNotice from "@/components/StateNotice.vue";
 import TaskEditor from "@/components/TaskEditor.vue";
 import { useTaskStore } from "@/stores/tasks";
 
@@ -118,12 +121,17 @@ function openSiblingTask(id) {
 
     <section class="detail-route-grid">
       <section class="panel">
+        <SectionHeader
+          eyebrow="Overview"
+          title="Task Overview"
+          description="Review one task in a dedicated route and practice a more formal record-detail workflow."
+        />
+
         <template v-if="loading">
-          <div class="empty-state">Loading task details...</div>
+          <LoadingSkeleton :blocks="4" />
         </template>
 
         <template v-else-if="selectedTask">
-          <h3>Task Overview</h3>
           <div class="detail-facts">
             <div class="detail-fact">
               <strong>Category</strong>
@@ -163,17 +171,28 @@ function openSiblingTask(id) {
         </template>
 
         <template v-else>
-          <div class="empty-state">The requested task could not be found.</div>
+          <StateNotice
+            tone="error"
+            title="Task not found"
+            message="The requested task could not be found. Return to the dashboard and choose another record."
+          />
         </template>
       </section>
 
-      <TaskEditor
-        :task="selectedTask"
-        :saving="saving"
-        @save="handleSave"
-        @open-create="router.push({ name: 'dashboard' })"
-        @delete="requestDelete"
-      />
+      <section class="editor-zone">
+        <SectionHeader
+          eyebrow="Editor"
+          title="Edit Current Task"
+          description="Update the current record without leaving this route."
+        />
+        <TaskEditor
+          :task="selectedTask"
+          :saving="saving"
+          @save="handleSave"
+          @open-create="router.push({ name: 'dashboard' })"
+          @delete="requestDelete"
+        />
+      </section>
     </section>
 
     <ConfirmDialog

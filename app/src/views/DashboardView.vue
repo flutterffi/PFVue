@@ -133,37 +133,46 @@ function openTaskDetail(id) {
       </div>
     </div>
 
-    <SummaryCards :summary="summary" />
-
-    <SectionHeader
-      eyebrow="Workspace"
-      title="Active Filters"
-      description="This area behaves like a real admin board with category tabs, sorting, and route-driven detail pages."
-    />
-
-    <section class="category-tabs">
-      <button
-        v-for="tab in categories"
-        :key="tab"
-        class="ghost-button"
-        :class="{ activeTab: category === tab }"
-        @click="category = tab"
-      >
-        {{ tab }}
-      </button>
+    <section class="dashboard-zone">
+      <SectionHeader
+        eyebrow="Overview"
+        title="Workspace Metrics"
+        description="These summary cards simulate the quick-scan data strip common in formal admin dashboards."
+      />
+      <SummaryCards :summary="summary" :loading="loading" />
     </section>
 
-    <TaskFilters
-      v-model:keyword="keyword"
-      v-model:status="status"
-      v-model:category="category"
-      :categories="categories"
-      v-model:sort-by="sortBy"
-      :total-results="totalResults"
-      :page-range="pageRange"
-      :page-size="pageSize"
-      @reset="resetFilters"
-    />
+    <section class="dashboard-zone">
+      <SectionHeader
+        eyebrow="Workspace"
+        title="Active Filters"
+        description="This area behaves like a real admin board with category tabs, sorting, and route-driven detail pages."
+      />
+
+      <section class="category-tabs">
+        <button
+          v-for="tab in categories"
+          :key="tab"
+          class="ghost-button"
+          :class="{ activeTab: category === tab }"
+          @click="category = tab"
+        >
+          {{ tab }}
+        </button>
+      </section>
+
+      <TaskFilters
+        v-model:keyword="keyword"
+        v-model:status="status"
+        v-model:category="category"
+        :categories="categories"
+        v-model:sort-by="sortBy"
+        :total-results="totalResults"
+        :page-range="pageRange"
+        :page-size="pageSize"
+        @reset="resetFilters"
+      />
+    </section>
 
     <StateNotice v-if="error" tone="error" title="Dashboard error" :message="error" />
     <StateNotice
@@ -180,11 +189,11 @@ function openTaskDetail(id) {
       message="Try changing the default status filter in Settings, then return here and compare how the dashboard starts with a different working context. You can also switch category tabs to simulate module-level task boards."
     />
 
-    <section class="dashboard-secondary-grid">
-      <ActivityPanel :items="recentActivity" />
+    <section class="dashboard-zone dashboard-secondary-grid">
+      <ActivityPanel :items="recentActivity" :loading="loading" />
     </section>
 
-    <section class="workspace-grid">
+    <section class="dashboard-zone workspace-grid">
       <TaskList
         :tasks="pagedTasks"
         :selected-task-id="selectedTask?.id ?? null"
@@ -200,14 +209,21 @@ function openTaskDetail(id) {
         @next-page="goToNextPage"
       />
 
-      <TaskEditor
-        :task="selectedTask"
-        :saving="saving"
-        @save="handleSave"
-        @create="handleCreate"
-        @open-create="createModalOpen = true"
-        @delete="requestDelete"
-      />
+      <section class="editor-zone">
+        <SectionHeader
+          eyebrow="Editor"
+          title="Task Editing"
+          description="Keep one record selected and update it in place, just like a split-view admin workspace."
+        />
+        <TaskEditor
+          :task="selectedTask"
+          :saving="saving"
+          @save="handleSave"
+          @create="handleCreate"
+          @open-create="createModalOpen = true"
+          @delete="requestDelete"
+        />
+      </section>
     </section>
 
     <TaskCreateModal
